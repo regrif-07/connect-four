@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../../connect_four_core/include/board.h"
+
 void startMainMenu();
 void startSavesMenu();
 
@@ -20,13 +22,23 @@ void startMainMenu()
     while (true)
     {
         printf("1) Play a new game\n"
-                      "2) Load already saved game\n"
-                      "3) Exit the game\n");
+               "2) Load already saved game\n"
+               "3) Exit the game\n");
 
         switch (loopReadInteger("> "))
         {
         case 1:
-            printf("Playing a new game...\n");
+            // some test code to see the work of board functionality
+            Board* board = allocateEmptyBoard();
+            setCellAt(board, 5, 4, CROSS);
+            setCellAt(board, 4, 4, CROSS);
+            setCellAt(board, 3, 4, CROSS);
+            setCellAt(board, 5, 1, ZERO);
+            setCellAt(board, 4, 1, ZERO);
+            setCellAt(board, 5, 0, ZERO);
+            displayBoard(board);
+            free(board);
+
             break;
 
         case 2:
