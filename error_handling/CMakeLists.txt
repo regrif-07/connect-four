@@ -1,0 +1,2 @@
+add_library(error_handling INTERFACE)
+target_include_directories(error_handling INTERFACE include)
