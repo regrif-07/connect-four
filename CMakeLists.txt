@@ -4,4 +4,5 @@ project(connect_four C)
 set(CMAKE_C_STANDARD 23)
 
 add_subdirectory(connect_four_game)
+add_subdirectory(connect_four_core)
 add_subdirectory(utility)
