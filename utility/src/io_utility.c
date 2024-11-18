@@ -78,15 +78,15 @@ char* readLine(const char* prompt, const bool discardEmpty)
             continue;
         }
 
-        const size_t lineLen = strlen(line);
-        if (discardEmpty && lineLen == 0)
+        size_t lineLen = strlen(line);
+        if (lineLen == 1 && line[0] == '\n' && discardEmpty)
         {
-            printf("Empty input is not supported.");
+            printf("Empty input is not supported.\n");
             continue;
         }
         if (line[lineLen - 1] == '\n')
         {
-            line[lineLen - 1] = '\0';
+            line[lineLen-- - 1] = '\0';
         }
 
         return line;
