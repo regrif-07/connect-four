@@ -9,7 +9,7 @@ static ErrorCode g_errorCode = NO_ERROR;
 
 void setUp()
 {
-    g_testBoard = allocateEmptyBoard(&g_errorCode);
+    g_testBoard = createEmptyBoard(&g_errorCode);
     TEST_ASSERT_NOT_NULL(g_testBoard);
     TEST_ASSERT_EQUAL(NO_ERROR, g_errorCode);
 }

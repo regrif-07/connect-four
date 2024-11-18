@@ -24,7 +24,7 @@ typedef struct
 /// Allocate a new board and set all cells to EMPTY.
 /// @param errorCode out error parameter; ERROR_MEMORY if allocation failed, NO_ERROR otherwise.
 /// @return a pointer to an allocated empty board or nullptr in case of allocation failure.
-Board* allocateEmptyBoard(ErrorCode* errorCode);
+Board* createEmptyBoard(ErrorCode* errorCode);
 
 /// Get cell from a specified board using provided row/cell indices.
 /// @param board a board to get cell from.

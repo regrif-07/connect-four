@@ -6,4 +6,5 @@ add_library(connect_four_core STATIC
 target_include_directories(connect_four_core PUBLIC include)
 
 target_link_libraries(connect_four_core
-        error_handling)
+        error_handling
+        utility)

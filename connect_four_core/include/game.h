@@ -6,10 +6,18 @@
 
 typedef struct
 {
-    char* crossPlayerName;
-    char* zeroPlayerName;
+    char* name;
+    Cell cell;
+} Player;
+
+typedef struct
+{
+    Player firstPlayer;
+    Player secondPlayer;
+    Player* currentPlayer;
     Board* board;
 } GameContext;
 
-GameContext* allocateNewGameContext(ErrorCode* errorCode);
+GameContext* createNewGameContext(ErrorCode* errorCode);
+void freeGameContext(GameContext* gameContext);
 void startGame(GameContext* gameContext, ErrorCode* errorCode);

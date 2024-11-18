@@ -18,7 +18,7 @@ bool areValidCellIndices(const int rowIndex, const int columnIndex);
 /// @note assertion will fail in case some kind of cell is unhandled (doesn't have corresponding char).
 char getCellChar(Cell cell);
 
-Board* allocateEmptyBoard(ErrorCode* errorCode)
+Board* createEmptyBoard(ErrorCode* errorCode)
 {
     Board* board = malloc(sizeof(Board));
     if (!board)

@@ -6,7 +6,6 @@
 
 void startMainMenu();
 void startSavesMenu();
-GameContext* createNewGameContext(ErrorCode* errorCode);
 
 int main(void)
 {
@@ -35,10 +34,7 @@ void startMainMenu()
                 printf("\n");
                 startGame(gameContext, &errorCode);
 
-                free(gameContext->crossPlayerName);
-                free(gameContext->zeroPlayerName);
-                free(gameContext->board);
-                free(gameContext);
+                freeGameContext(gameContext);
             }
             else
             {
@@ -100,20 +96,4 @@ void startSavesMenu()
 
         printf("\n");
     }
-}
-
-GameContext* createNewGameContext(ErrorCode* errorCode)
-{
-    GameContext* gameContext = allocateNewGameContext(errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
-    {
-        return nullptr;
-    }
-
-    printf("\n");
-    gameContext->crossPlayerName = readLine("Enter the name of the cross ('X') player: ", true);
-    gameContext->zeroPlayerName = readLine("Enter the name of the zero ('O') player: ", true);
-
-    if (errorCode) *errorCode = NO_ERROR;
-    return gameContext;
 }

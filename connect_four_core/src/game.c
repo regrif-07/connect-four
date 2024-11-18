@@ -2,13 +2,14 @@
 
 #include <board.h>
 #include <error_codes.h>
+#include <io_utility.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 void displayGameHeader(const GameContext* gameContext);
 
-GameContext* allocateNewGameContext(ErrorCode* errorCode)
+GameContext* createNewGameContext(ErrorCode* errorCode)
 {
     GameContext* gameContext = malloc(sizeof(GameContext));
     if (!gameContext)
@@ -17,10 +18,17 @@ GameContext* allocateNewGameContext(ErrorCode* errorCode)
         return nullptr;
     }
 
-    gameContext->crossPlayerName = nullptr;
-    gameContext->zeroPlayerName = nullptr;
+    gameContext->firstPlayer = (Player) {
+        readLine("Enter the name of the cross ('X') player: ", true),
+        CROSS
+    };
+    gameContext->secondPlayer = (Player) {
+        readLine("Enter the name of the zero ('O') player: ", true),
+        ZERO
+    };
+    gameContext->currentPlayer = &(gameContext->firstPlayer);
 
-    gameContext->board = allocateEmptyBoard(errorCode);
+    gameContext->board = createEmptyBoard(errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
         return nullptr;
@@ -30,9 +38,17 @@ GameContext* allocateNewGameContext(ErrorCode* errorCode)
     return gameContext;
 }
 
+void freeGameContext(GameContext* gameContext)
+{
+    free(gameContext->firstPlayer.name);
+    free(gameContext->secondPlayer.name);
+    free(gameContext->board);
+    free(gameContext);
+}
+
 void startGame(GameContext* gameContext, ErrorCode* errorCode)
 {
-    if (!gameContext || !gameContext->crossPlayerName || !gameContext->zeroPlayerName || !gameContext->board)
+    if (!gameContext || !gameContext->board)
     {
         if (errorCode) *errorCode = ERROR_INVALID_ARGUMENT;
         return;
@@ -47,7 +63,7 @@ void displayGameHeader(const GameContext* gameContext)
            "CONNECT FOUR\n"
            "*===*\n"
            "%s ('X') VS %s ('O')\n"
-           "*===*\n", gameContext->crossPlayerName, gameContext->zeroPlayerName);
+           "*===*\n", gameContext->firstPlayer.name, gameContext->secondPlayer.name);
 
     printf("Initial board state:\n");
     displayBoard(gameContext->board);
