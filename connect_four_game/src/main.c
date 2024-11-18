@@ -29,13 +29,13 @@ void startMainMenu()
         {
         case 1:
             // some test code to see the work of board functionality
-            Board* board = allocateEmptyBoard();
-            setCellAt(board, 5, 4, CROSS);
-            setCellAt(board, 4, 4, CROSS);
-            setCellAt(board, 3, 4, CROSS);
-            setCellAt(board, 5, 1, ZERO);
-            setCellAt(board, 4, 1, ZERO);
-            setCellAt(board, 5, 0, ZERO);
+            Board* board = allocateEmptyBoard(nullptr);
+            setCellAt(board, 5, 4, CROSS, nullptr);
+            setCellAt(board, 4, 4, CROSS, nullptr);
+            setCellAt(board, 3, 4, CROSS, nullptr);
+            setCellAt(board, 5, 1, ZERO, nullptr);
+            setCellAt(board, 4, 1, ZERO, nullptr);
+            setCellAt(board, 5, 0, ZERO, nullptr);
             displayBoard(board);
             free(board);
 
