@@ -1,12 +1,12 @@
+#include <game.h>
 #include <io_utility.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../../connect_four_core/include/board.h"
-
 void startMainMenu();
 void startSavesMenu();
+GameContext* createNewGameContext(ErrorCode* errorCode);
 
 int main(void)
 {
@@ -28,16 +28,21 @@ void startMainMenu()
         switch (loopReadInteger("> "))
         {
         case 1:
-            // some test code to see the work of board functionality
-            Board* board = allocateEmptyBoard(nullptr);
-            setCellAt(board, 5, 4, CROSS, nullptr);
-            setCellAt(board, 4, 4, CROSS, nullptr);
-            setCellAt(board, 3, 4, CROSS, nullptr);
-            setCellAt(board, 5, 1, ZERO, nullptr);
-            setCellAt(board, 4, 1, ZERO, nullptr);
-            setCellAt(board, 5, 0, ZERO, nullptr);
-            displayBoard(board);
-            free(board);
+            ErrorCode errorCode;
+            GameContext* gameContext = createNewGameContext(&errorCode);
+            if (errorCode == NO_ERROR)
+            {
+                startGame(gameContext, &errorCode);
+
+                free(gameContext->crossPlayerName);
+                free(gameContext->zeroPlayerName);
+                free(gameContext->board);
+                free(gameContext);
+            }
+            else
+            {
+                printf("Unexpected error occurred while trying to create a new game.\n");
+            }
 
             break;
 
@@ -94,4 +99,20 @@ void startSavesMenu()
 
         printf("\n");
     }
+}
+
+GameContext* createNewGameContext(ErrorCode* errorCode)
+{
+    GameContext* gameContext = allocateNewGameContext(errorCode);
+    if (errorCode && *errorCode != NO_ERROR)
+    {
+        return nullptr;
+    }
+
+    printf("\n");
+    gameContext->crossPlayerName = readLine("Enter the name of the cross ('X') player: ", true);
+    gameContext->zeroPlayerName = readLine("Enter the name of the zero ('O') player: ", true);
+
+    if (errorCode) *errorCode = NO_ERROR;
+    return gameContext;
 }
