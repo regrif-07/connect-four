@@ -42,7 +42,7 @@ int loopReadIntegerInRange(const char* prompt, const int min, const int max)
         const int userInteger = loopReadInteger(prompt);
         if (userInteger < min || userInteger > max)
         {
-            printf("Your integer is out of range (%d-%d). Try again.", min, max);
+            printf("Your integer is out of range (%d, %d). Try again.", min, max);
             continue;
         }
 
