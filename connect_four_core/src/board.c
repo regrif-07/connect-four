@@ -6,12 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/// Check if provided indices are valid in terms of board sizes.
-/// @param rowIndex a row index to check.
-/// @param columnIndex a column index to check.
-/// @return true if provided indices are valid; false otherwise.
-bool areValidCellIndices(const int rowIndex, const int columnIndex);
-
 /// Get a corresponding char representation of a cell.
 /// @param cell a cell, char representation of which to receive.
 /// @return char representation of cell.
@@ -34,6 +28,11 @@ Board* createEmptyBoard(ErrorCode* errorCode)
 
     if (errorCode) *errorCode = NO_ERROR;
     return board;
+}
+
+bool areValidCellIndices(const int rowIndex, const int columnIndex)
+{
+    return rowIndex >= 0 && rowIndex < BOARD_HEIGHT && columnIndex >= 0 && columnIndex < BOARD_WIDTH;
 }
 
 Cell getCellAt(const Board* board, const int rowIndex, const int columnIndex, ErrorCode* errorCode)
@@ -94,11 +93,6 @@ void displayBoard(const Board* board)
     }
 
     printf("\n");
-}
-
-bool areValidCellIndices(const int rowIndex, const int columnIndex)
-{
-    return rowIndex >= 0 && rowIndex < BOARD_HEIGHT && columnIndex >= 0 && columnIndex < BOARD_WIDTH;
 }
 
 char getCellChar(const Cell cell)

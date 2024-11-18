@@ -26,6 +26,12 @@ typedef struct
 /// @return a pointer to an allocated empty board or nullptr in case of allocation failure.
 Board* createEmptyBoard(ErrorCode* errorCode);
 
+/// Check if provided indices are valid in terms of board sizes.
+/// @param rowIndex a row index to check.
+/// @param columnIndex a column index to check.
+/// @return true if provided indices are valid; false otherwise.
+bool areValidCellIndices(const int rowIndex, const int columnIndex);
+
 /// Get cell from a specified board using provided row/cell indices.
 /// @param board a board to get cell from.
 /// @param rowIndex a row index of a target cell.

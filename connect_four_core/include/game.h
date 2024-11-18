@@ -1,8 +1,8 @@
 #pragma once
 
 #include <board.h>
-
 #include <error_codes.h>
+#include <game_state.h>
 
 typedef struct
 {
@@ -12,10 +12,11 @@ typedef struct
 
 typedef struct
 {
-    Player firstPlayer;
-    Player secondPlayer;
+    Player crossPlayer;
+    Player zeroPlayer;
     Player* currentPlayer;
     Board* board;
+    GameState gameState;
 } GameContext;
 
 GameContext* createNewGameContext(ErrorCode* errorCode);

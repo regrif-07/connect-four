@@ -2,13 +2,15 @@
 
 #include <board.h>
 #include <error_codes.h>
+#include <game_state.h>
 #include <io_utility.h>
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 void displayGameHeader(const GameContext* gameContext);
-void startCurrentPlayerTurn(const GameContext* gameContext);
+void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowIndex, int* lastMoveColumnIndex);
 int findFirstFreeColumnCell(const Board* board, const int columnIndex);
 void switchCurrentPlayer(GameContext* gameContext);
 
@@ -21,15 +23,15 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
         return nullptr;
     }
 
-    gameContext->firstPlayer = (Player) {
+    gameContext->crossPlayer = (Player) {
         readLine("Enter the name of the cross ('X') player: ", true),
         CROSS
     };
-    gameContext->secondPlayer = (Player) {
+    gameContext->zeroPlayer = (Player) {
         readLine("Enter the name of the zero ('O') player: ", true),
         ZERO
     };
-    gameContext->currentPlayer = &(gameContext->firstPlayer);
+    gameContext->currentPlayer = &(gameContext->crossPlayer);
 
     gameContext->board = createEmptyBoard(errorCode);
     if (errorCode && *errorCode != NO_ERROR)
@@ -37,14 +39,16 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
         return nullptr;
     }
 
+    gameContext->gameState = IN_PROCESS;
+
     if (errorCode) *errorCode = NO_ERROR;
     return gameContext;
 }
 
 void freeGameContext(GameContext* gameContext)
 {
-    free(gameContext->firstPlayer.name);
-    free(gameContext->secondPlayer.name);
+    free(gameContext->crossPlayer.name);
+    free(gameContext->zeroPlayer.name);
     free(gameContext->board);
     free(gameContext);
 }
@@ -59,16 +63,22 @@ void startGame(GameContext* gameContext, ErrorCode* errorCode)
 
     displayGameHeader(gameContext);
 
-    while (true)
+    while (gameContext->gameState == IN_PROCESS) // in case loaded game was already ended
     {
         printf("\n");
         displayBoard(gameContext->board);
 
         printf("%s, it is your turn.\n", gameContext->currentPlayer->name);
-        startCurrentPlayerTurn(gameContext);
+        int lastMoveRowIndex;
+        int lastMoveColumnIndex;
+        startCurrentPlayerTurn(gameContext, &lastMoveRowIndex, &lastMoveColumnIndex);
 
-        // update game state
-        // end the game if game state != IN_PROCESS
+        gameContext->gameState = analyzeGameState(gameContext->board, lastMoveRowIndex, lastMoveColumnIndex, nullptr);
+        if (gameContext->gameState != IN_PROCESS)
+        {
+            return;
+        }
+
         switchCurrentPlayer(gameContext);
     }
 }
@@ -79,15 +89,17 @@ void displayGameHeader(const GameContext* gameContext)
            "CONNECT FOUR\n"
            "*===*\n"
            "%s ('X') VS %s ('O')\n"
-           "*===*\n", gameContext->firstPlayer.name, gameContext->secondPlayer.name);
+           "*===*\n", gameContext->crossPlayer.name, gameContext->zeroPlayer.name);
 
     printf("Initial board state:\n");
     displayBoard(gameContext->board);
     printf("*===*\n");
 }
 
-void startCurrentPlayerTurn(const GameContext* gameContext)
+void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowIndex, int* lastMoveColumnIndex)
 {
+    assert(lastMoveRowIndex && lastMoveColumnIndex);
+
     while (true)
     {
         const int targetColumnIndex = loopReadIntegerInRange("Enter the column: ", 1, BOARD_WIDTH) - 1;
@@ -99,6 +111,9 @@ void startCurrentPlayerTurn(const GameContext* gameContext)
         }
 
         setCellAt(gameContext->board, targetRowIndex, targetColumnIndex, gameContext->currentPlayer->cell, nullptr);
+        *lastMoveRowIndex = targetRowIndex;
+        *lastMoveColumnIndex = targetColumnIndex;
+
         break;
     }
 }
@@ -118,7 +133,7 @@ int findFirstFreeColumnCell(const Board* board, const int columnIndex)
 
 void switchCurrentPlayer(GameContext* gameContext)
 {
-    gameContext->currentPlayer = (gameContext->currentPlayer == &gameContext->firstPlayer)
-                               ? &gameContext->secondPlayer
-                               : &gameContext->firstPlayer;
+    gameContext->currentPlayer = (gameContext->currentPlayer == &gameContext->crossPlayer)
+                               ? &gameContext->zeroPlayer
+                               : &gameContext->crossPlayer;
 }

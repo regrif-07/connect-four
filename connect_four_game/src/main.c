@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <game.h>
 #include <io_utility.h>
 
@@ -27,12 +28,34 @@ void startMainMenu()
         switch (loopReadInteger("> "))
         {
         case 1:
+            printf("\n");
+
             ErrorCode errorCode;
             GameContext* gameContext = createNewGameContext(&errorCode);
             if (errorCode == NO_ERROR)
             {
                 printf("\n");
                 startGame(gameContext, &errorCode);
+                printf("\n");
+
+                displayBoard(gameContext->board);
+                switch (gameContext->gameState)
+                {
+                case CROSS_WIN:
+                    printf("%s ('X') victory!\n", gameContext->crossPlayer.name);
+                    break;
+
+                case ZERO_WIN:
+                    printf("%s ('O') victory!\n", gameContext->zeroPlayer.name);
+                    break;
+
+                case DRAW:
+                    printf("It's a draw!\n");
+                    break;
+
+                default:
+                    assert(false && "unhandled game state");
+                }
 
                 freeGameContext(gameContext);
             }
