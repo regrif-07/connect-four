@@ -33,6 +33,12 @@ Board* allocateEmptyBoard(ErrorCode* errorCode)
 
 CellType getCellAt(const Board* board, const int rowIndex, const int columnIndex, ErrorCode* errorCode)
 {
+    if (!board)
+    {
+        if (errorCode) *errorCode = ERROR_NULLPTR_ARGUMENT;
+        return EMPTY;
+    }
+
     if (!areValidCellIndices(rowIndex, columnIndex))
     {
         if (errorCode) *errorCode = ERROR_ARGUMENT_OUT_OF_RANGE;
@@ -45,6 +51,12 @@ CellType getCellAt(const Board* board, const int rowIndex, const int columnIndex
 
 void setCellAt(Board* board, const int rowIndex, const int columnIndex, const CellType cell, ErrorCode* errorCode)
 {
+    if (!board)
+    {
+        if (errorCode) *errorCode = ERROR_NULLPTR_ARGUMENT;
+        return;
+    }
+
     if (!areValidCellIndices(rowIndex, columnIndex))
     {
         if (errorCode) *errorCode = ERROR_ARGUMENT_OUT_OF_RANGE;
@@ -57,6 +69,11 @@ void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Ce
 
 void displayBoard(const Board* board)
 {
+    if (!board)
+    {
+        return;
+    }
+
     for (int rowIndex = 0; rowIndex < BOARD_HEIGHT; ++rowIndex)
     {
         for (int columnIndex = 0; columnIndex < BOARD_WIDTH; ++columnIndex)
