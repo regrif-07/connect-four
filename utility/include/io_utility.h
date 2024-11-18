@@ -2,8 +2,6 @@
 
 bool readAndScanInteger(int* out);
 int loopReadInteger(const char* prompt);
-
-bool readAndScanLongLong(long long* out);
-long long loopReadLongLong(const char* prompt);
+int loopReadIntegerInRange(const char* prompt, const int min, const int max);
 
 char* readLine(const char* prompt, const bool discardEmpty);
