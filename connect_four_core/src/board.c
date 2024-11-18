@@ -92,6 +92,8 @@ void displayBoard(const Board* board)
     {
         printf("%d", columnNumber);
     }
+
+    printf("\n");
 }
 
 bool areValidCellIndices(const int rowIndex, const int columnIndex)
@@ -103,7 +105,7 @@ char getCellChar(const Cell cell)
 {
     switch (cell)
     {
-    case EMPTY: return ' ';
+    case EMPTY: return '.';
     case CROSS: return 'X';
     case ZERO:  return 'O';
     default:

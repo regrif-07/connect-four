@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void displayGameHeader(const GameContext* gameContext);
+
 GameContext* allocateNewGameContext(ErrorCode* errorCode)
 {
     GameContext* gameContext = malloc(sizeof(GameContext));
@@ -36,6 +38,18 @@ void startGame(GameContext* gameContext, ErrorCode* errorCode)
         return;
     }
 
-    printf("%s %s", gameContext->crossPlayerName, gameContext->zeroPlayerName);
+    displayGameHeader(gameContext);
+}
+
+void displayGameHeader(const GameContext* gameContext)
+{
+    printf("*===*\n"
+           "CONNECT FOUR\n"
+           "*===*\n"
+           "%s ('X') VS %s ('O')\n"
+           "*===*\n", gameContext->crossPlayerName, gameContext->zeroPlayerName);
+
+    printf("Initial board state:\n");
     displayBoard(gameContext->board);
+    printf("*===*\n");
 }

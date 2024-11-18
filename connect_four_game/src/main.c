@@ -32,6 +32,7 @@ void startMainMenu()
             GameContext* gameContext = createNewGameContext(&errorCode);
             if (errorCode == NO_ERROR)
             {
+                printf("\n");
                 startGame(gameContext, &errorCode);
 
                 free(gameContext->crossPlayerName);
