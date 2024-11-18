@@ -40,7 +40,7 @@ CellType getCellAt(const Board* board, const int rowIndex, const int columnIndex
     }
 
     if (errorCode) *errorCode = NO_ERROR;
-    return board->cellArray[rowIndex * BOARD_HEIGHT + columnIndex];
+    return board->cellArray[rowIndex * BOARD_WIDTH + columnIndex];
 }
 
 void setCellAt(Board* board, const int rowIndex, const int columnIndex, const CellType cell, ErrorCode* errorCode)
@@ -52,7 +52,7 @@ void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Ce
     }
 
     if (errorCode) *errorCode = NO_ERROR;
-    board->cellArray[rowIndex * BOARD_HEIGHT + columnIndex] = cell;
+    board->cellArray[rowIndex * BOARD_WIDTH + columnIndex] = cell;
 }
 
 void displayBoard(const Board* board)
