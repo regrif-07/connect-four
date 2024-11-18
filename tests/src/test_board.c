@@ -1,7 +1,3 @@
-//
-// Created by regrif07 on 11/18/24.
-//
-
 #include <board.h>
 
 #include <unity.h>
@@ -42,15 +38,15 @@ void testGetCellAtValidIndices()
         g_testBoard->cellArray[i] = CROSS;
     }
 
-    const CellType firstCell = getCellAt(g_testBoard, 0, 0, &g_errorCode);
+    const Cell firstCell = getCellAt(g_testBoard, 0, 0, &g_errorCode);
     TEST_ASSERT_EQUAL(NO_ERROR, g_errorCode);
     TEST_ASSERT_EQUAL(CROSS, firstCell);
 
-    const CellType middleCell = getCellAt(g_testBoard, BOARD_HEIGHT / 2, BOARD_WIDTH / 2, &g_errorCode);
+    const Cell middleCell = getCellAt(g_testBoard, BOARD_HEIGHT / 2, BOARD_WIDTH / 2, &g_errorCode);
     TEST_ASSERT_EQUAL(NO_ERROR, g_errorCode);
     TEST_ASSERT_EQUAL(CROSS, middleCell);
 
-    const CellType lastCell = getCellAt(g_testBoard, BOARD_HEIGHT - 1, BOARD_WIDTH - 1, &g_errorCode);
+    const Cell lastCell = getCellAt(g_testBoard, BOARD_HEIGHT - 1, BOARD_WIDTH - 1, &g_errorCode);
     TEST_ASSERT_EQUAL(NO_ERROR, g_errorCode);
     TEST_ASSERT_EQUAL(CROSS, lastCell);
 }

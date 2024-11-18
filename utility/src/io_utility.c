@@ -1,7 +1,3 @@
-//
-// Created by regrif07 on 11/7/24.
-//
-
 #include <io_utility.h>
 
 #include <stdio.h>

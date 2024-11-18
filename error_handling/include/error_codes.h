@@ -1,9 +1,6 @@
-//
-// Created by regrif07 on 11/15/24.
-//
-
 #pragma once
 
+/// represent a state/result of operation (e.g. function execution).
 typedef enum
 {
     NO_ERROR = 0,

@@ -1,7 +1,3 @@
-//
-// Created by regrif07 on 11/15/24.
-//
-
 #include <board.h>
 
 #include <error_codes.h>
@@ -10,8 +6,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/// Check if provided indices are valid in terms of board sizes.
+/// @param rowIndex a row index to check.
+/// @param columnIndex a column index to check.
+/// @return true if provided indices are valid; false otherwise.
 bool areValidCellIndices(const int rowIndex, const int columnIndex);
-char getCellChar(CellType cellType);
+
+/// Get a corresponding char representation of a cell.
+/// @param cell a cell, char representation of which to receive.
+/// @return char representation of cell.
+/// @note assertion will fail in case some kind of cell is unhandled (doesn't have corresponding char).
+char getCellChar(Cell cell);
 
 Board* allocateEmptyBoard(ErrorCode* errorCode)
 {
@@ -31,7 +36,7 @@ Board* allocateEmptyBoard(ErrorCode* errorCode)
     return board;
 }
 
-CellType getCellAt(const Board* board, const int rowIndex, const int columnIndex, ErrorCode* errorCode)
+Cell getCellAt(const Board* board, const int rowIndex, const int columnIndex, ErrorCode* errorCode)
 {
     if (!board)
     {
@@ -49,7 +54,7 @@ CellType getCellAt(const Board* board, const int rowIndex, const int columnIndex
     return board->cellArray[rowIndex * BOARD_WIDTH + columnIndex];
 }
 
-void setCellAt(Board* board, const int rowIndex, const int columnIndex, const CellType cell, ErrorCode* errorCode)
+void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Cell cell, ErrorCode* errorCode)
 {
     if (!board)
     {
@@ -94,9 +99,9 @@ bool areValidCellIndices(const int rowIndex, const int columnIndex)
     return rowIndex >= 0 && rowIndex < BOARD_HEIGHT && columnIndex >= 0 && columnIndex < BOARD_WIDTH;
 }
 
-char getCellChar(const CellType cellType)
+char getCellChar(const Cell cell)
 {
-    switch (cellType)
+    switch (cell)
     {
     case EMPTY: return ' ';
     case CROSS: return 'X';
