@@ -7,19 +7,19 @@
 bool readAndScanInteger(int* out);
 
 /// Ask user for an integer and loop until a valid input is received.
-/// @param prompt a prompt to be displayed before getting user input.
-/// @return an integer entered by a user.
+/// @param prompt prompt to be displayed before getting user input.
+/// @return integer entered by the user.
 int loopReadInteger(const char* prompt);
 
 /// Ask user for an integer in a specified range and loop until a valid (and in range) input is received.
-/// @param prompt a prompt to be displayed before getting user input.
+/// @param prompt prompt to be displayed before getting user input.
 /// @param min minimal number in a range of supported values.
 /// @param max maximum number in a range of supported values.
 /// @return user integer in a specified range.
 int loopReadIntegerInRange(const char* prompt, const int min, const int max);
 
 /// Ask user for a line.
-/// @param prompt a prompt to be displayed before getting user input.
+/// @param prompt prompt to be displayed before getting user input.
 /// @param discardEmpty discard empty input ("\n") or not. Input consisting of whitespaces is not considered empty.
-/// @return a line entered by a user (without newline character at the end).
+/// @return line entered by the user (without newline character at the end).
 char* readLine(const char* prompt, const bool discardEmpty);

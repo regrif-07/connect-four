@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/// Display initial information about game (game name, players, board state).
+/// Display the initial information about the game (game name, players, board state).
 /// @param gameContext current GameContext.
 void displayGameHeader(const GameContext* gameContext);
 
@@ -20,7 +20,7 @@ void displayGameHeader(const GameContext* gameContext);
 /// @param lastMoveColumnIndex out parameter; should be filled with column index of the last move.
 void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowIndex, int* lastMoveColumnIndex);
 
-/// Search and return the row index of a first free cell in a specified column.
+/// Search and return the row index of the first free cell in the specified column.
 /// @param board board to search in.
 /// @param columnIndex index of the column in which free cell should be searched.
 /// @return row index of the first free cell in the specified column; -1 if no such row was found.

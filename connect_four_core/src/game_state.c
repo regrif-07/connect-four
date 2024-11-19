@@ -11,8 +11,8 @@ constexpr int WINNING_STREAK_LENGTH = 4;
 /// @return true if it's a draw; false otherwise.
 bool isDraw(const Board* board);
 
-/// Check for a cell streak with respect to the last move.
-/// Direction of check is specified by rowOffset and columnOffset.
+/// Check for a winning cell streak with respect to the last move.
+/// Direction of the check is specified by rowOffset and columnOffset.
 /// @param board board in which streak should be checked.
 /// @param lastMoveRowIndex row index of the last move.
 /// @param lastMoveColumnIndex column index of the last move.
