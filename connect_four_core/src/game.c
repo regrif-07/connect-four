@@ -73,7 +73,7 @@ void startGame(GameContext* gameContext, ErrorCode* errorCode)
         int lastMoveColumnIndex;
         startCurrentPlayerTurn(gameContext, &lastMoveRowIndex, &lastMoveColumnIndex);
 
-        gameContext->gameState = analyzeGameState(gameContext->board, lastMoveRowIndex, lastMoveColumnIndex, nullptr);
+        gameContext->gameState = checkGameStateAndMarkWinningStreak(gameContext->board, lastMoveRowIndex, lastMoveColumnIndex, nullptr);
         if (gameContext->gameState != IN_PROCESS)
         {
             return;

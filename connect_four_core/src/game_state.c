@@ -7,15 +7,20 @@ constexpr int WINNING_STREAK_LENGTH = 4;
 
 bool isDraw(const Board* board);
 
-bool checkCellStreakByOffsets(
-    const Board* board,
+bool checkAndMarkCellStreakByOffsets(
+    Board* board,
     const int lastMoveRowIndex,
     const int lastMoveColumnIndex,
     const Cell lastMoveCell,
     const int rowOffset,
     const int columnOffset);
 
-GameState analyzeGameState(const Board* board, const int lastMoveRowIndex, const int lastMoveColumnIndex, ErrorCode* errorCode)
+void markWinningStreak(
+    Board* board,
+    int streakCellRowIndices[WINNING_STREAK_LENGTH],
+    int streakCellColumnIndices[WINNING_STREAK_LENGTH]);
+
+GameState checkGameStateAndMarkWinningStreak(Board* board, const int lastMoveRowIndex, const int lastMoveColumnIndex, ErrorCode* errorCode)
 {
     if (isDraw(board))
     {
@@ -42,7 +47,7 @@ GameState analyzeGameState(const Board* board, const int lastMoveRowIndex, const
                 continue;
             }
 
-            if (checkCellStreakByOffsets(board, lastMoveRowIndex, lastMoveColumnIndex, lastMoveCell, rowOffset, columnOffset))
+            if (checkAndMarkCellStreakByOffsets(board, lastMoveRowIndex, lastMoveColumnIndex, lastMoveCell, rowOffset, columnOffset))
             {
                 return (lastMoveCell == CROSS) ? CROSS_WIN : ZERO_WIN;
             }
@@ -68,14 +73,17 @@ bool isDraw(const Board* board)
     return true;
 }
 
-bool checkCellStreakByOffsets(
-    const Board* board,
+bool checkAndMarkCellStreakByOffsets(
+    Board* board,
     const int lastMoveRowIndex,
     const int lastMoveColumnIndex,
     const Cell lastMoveCell,
     const int rowOffset,
     const int columnOffset)
 {
+    int streakCellRowIndices[WINNING_STREAK_LENGTH];
+    int streakCellColumnIndices[WINNING_STREAK_LENGTH];
+
     int cellStreakCounter = 0;
     for (int rowIndex = lastMoveRowIndex, columnIndex = lastMoveColumnIndex;
          areValidCellIndices(rowIndex, columnIndex);
@@ -83,8 +91,13 @@ bool checkCellStreakByOffsets(
     {
         if (getCellAt(board, rowIndex, columnIndex, nullptr) == lastMoveCell)
         {
-            if (++cellStreakCounter >= WINNING_STREAK_LENGTH)
+            streakCellRowIndices[cellStreakCounter] = rowIndex;
+            streakCellColumnIndices[cellStreakCounter] = columnIndex;
+
+            ++cellStreakCounter;
+            if (cellStreakCounter >= WINNING_STREAK_LENGTH)
             {
+                markWinningStreak(board, streakCellRowIndices, streakCellColumnIndices);
                 return true;
             }
         }
@@ -95,4 +108,15 @@ bool checkCellStreakByOffsets(
     }
 
     return false;
+}
+
+void markWinningStreak(
+    Board* board,
+    int streakCellRowIndices[WINNING_STREAK_LENGTH],
+    int streakCellColumnIndices[WINNING_STREAK_LENGTH])
+{
+    for (int i = 0; i < WINNING_STREAK_LENGTH; ++i)
+    {
+        setCellAt(board, streakCellRowIndices[i], streakCellColumnIndices[i], STREAK, nullptr);
+    }
 }

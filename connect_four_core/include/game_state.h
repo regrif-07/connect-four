@@ -11,4 +11,4 @@ typedef enum
     DRAW,
 } GameState;
 
-GameState analyzeGameState(const Board* board, const int lastMoveRowIndex, const int lastMoveColumnIndex, ErrorCode* errorCode);
+GameState checkGameStateAndMarkWinningStreak(Board* board, const int lastMoveRowIndex, const int lastMoveColumnIndex, ErrorCode* errorCode);

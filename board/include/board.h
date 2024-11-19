@@ -12,7 +12,8 @@ typedef enum
 {
     EMPTY,
     CROSS,
-    ZERO
+    ZERO,
+    STREAK, // can be used to mark a final streak on the game board
 } Cell;
 
 /// represent a board.

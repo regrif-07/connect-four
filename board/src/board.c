@@ -72,6 +72,7 @@ char getCellChar(const Cell cell)
     case EMPTY: return '.';
     case CROSS: return 'X';
     case ZERO:  return 'O';
+    case STREAK:   return 'Y';
     default:
         assert(0 && "Unhandled cell type");
     }
