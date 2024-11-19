@@ -9,9 +9,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/// Display initial information about game (game name, players, board state).
+/// @param gameContext current GameContext.
 void displayGameHeader(const GameContext* gameContext);
+
+/// Loop and ask current player for a valid move he wants to play.
+/// Perform this move and return last move data throughout out parameters.
+/// @param gameContext current GameContext.
+/// @param lastMoveRowIndex out parameter; should be filled with row index of the last move.
+/// @param lastMoveColumnIndex out parameter; should be filled with column index of the last move.
 void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowIndex, int* lastMoveColumnIndex);
+
+/// Search and return the row index of a first free cell in a specified column.
+/// @param board board to search in.
+/// @param columnIndex index of the column in which free cell should be searched.
+/// @return row index of the first free cell in the specified column; -1 if no such row was found.
 int findFirstFreeColumnCell(const Board* board, const int columnIndex);
+
+/// Switch current player (cross player to zero player and zero player to cross player).
+/// @param gameContext current GameContext.
 void switchCurrentPlayer(GameContext* gameContext);
 
 GameContext* createNewGameContext(ErrorCode* errorCode)
@@ -57,7 +73,7 @@ void startGame(GameContext* gameContext, ErrorCode* errorCode)
 {
     if (!gameContext || !gameContext->board)
     {
-        if (errorCode) *errorCode = ERROR_INVALID_ARGUMENT;
+        if (errorCode) *errorCode = ERROR_NULLPTR_ARGUMENT;
         return;
     }
 
@@ -81,6 +97,8 @@ void startGame(GameContext* gameContext, ErrorCode* errorCode)
 
         switchCurrentPlayer(gameContext);
     }
+
+    if (errorCode) *errorCode = NO_ERROR;
 }
 
 void displayGameHeader(const GameContext* gameContext)
@@ -98,7 +116,7 @@ void displayGameHeader(const GameContext* gameContext)
 
 void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowIndex, int* lastMoveColumnIndex)
 {
-    assert(lastMoveRowIndex && lastMoveColumnIndex);
+    assert(lastMoveRowIndex && lastMoveColumnIndex); // check for nullptr output parameters
 
     while (true)
     {
