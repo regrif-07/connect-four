@@ -1,16 +1,18 @@
 #include <io_utility.h>
 
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
 constexpr int IO_BUFFER_SIZE = 4096;
 
-// original solution https://www.reddit.com/r/cprogramming/comments/1aop62k/alternatives_to_scanf_for_reading_integers/
 bool readAndScanInteger(int* out)
 {
-    static char line[IO_BUFFER_SIZE];
-    int chars = 0;
-    if (!fgets(line, sizeof(line), stdin) || sscanf(line, " %d %n", out, &chars) != 1 || line[chars] != 0)
+    static char line[IO_BUFFER_SIZE]; // our buffer that will persist between function calls
+    int chars = 0; // number of characters read
+    if (!fgets(line, sizeof(line), stdin) || // read a line to the buffer
+        sscanf(line, " %d %n", out, &chars) != 1 || // try to parse an integer out of our buffer
+        line[chars] != 0) // discard input with extra characters
     {
         return false;
     }
@@ -18,7 +20,6 @@ bool readAndScanInteger(int* out)
     return true;
 }
 
-// read and scan user input for integer until actual valid input is received; return the received integer value
 int loopReadInteger(const char* prompt)
 {
     while (true)
@@ -37,6 +38,8 @@ int loopReadInteger(const char* prompt)
 
 int loopReadIntegerInRange(const char* prompt, const int min, const int max)
 {
+    assert(min <= max && "Invalid range");
+
     while (true)
     {
         const int userInteger = loopReadInteger(prompt);
@@ -72,7 +75,7 @@ char* readLine(const char* prompt, const bool discardEmpty)
         }
         if (line[lineLen - 1] == '\n')
         {
-            line[lineLen-- - 1] = '\0';
+            line[lineLen-- - 1] = '\0'; // remove the newline character at the end
         }
 
         return line;
