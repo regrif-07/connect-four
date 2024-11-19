@@ -52,6 +52,12 @@ Cell getCellAt(const Board* board, const int rowIndex, const int columnIndex, Er
 /// NO_ERROR otherwise.
 void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Cell cell, ErrorCode* errorCode);
 
+/// Get a corresponding char representation of a cell.
+/// @param cell a cell, char representation of which to receive.
+/// @return char representation of cell.
+/// @note assertion will fail in case some kind of cell is unhandled (doesn't have corresponding char).
+char getCellChar(const Cell cell);
+
 /// Display a specified board. Display nothing in case board is nullptr.
 /// @param board a board to display.
 void displayBoard(const Board* board);

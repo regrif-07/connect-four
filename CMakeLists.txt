@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(Unity)
 
 add_subdirectory(connect_four_game)
 add_subdirectory(connect_four_core)
+add_subdirectory(board)
 add_subdirectory(utility)
 add_subdirectory(error_handling)
 

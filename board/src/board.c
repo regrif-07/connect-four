@@ -6,12 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/// Get a corresponding char representation of a cell.
-/// @param cell a cell, char representation of which to receive.
-/// @return char representation of cell.
-/// @note assertion will fail in case some kind of cell is unhandled (doesn't have corresponding char).
-char getCellChar(Cell cell);
-
 Board* createEmptyBoard(ErrorCode* errorCode)
 {
     Board* board = malloc(sizeof(Board));
@@ -71,6 +65,18 @@ void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Ce
     board->cellArray[rowIndex * BOARD_WIDTH + columnIndex] = cell;
 }
 
+char getCellChar(const Cell cell)
+{
+    switch (cell)
+    {
+    case EMPTY: return '.';
+    case CROSS: return 'X';
+    case ZERO:  return 'O';
+    default:
+        assert(0 && "Unhandled cell type");
+    }
+}
+
 void displayBoard(const Board* board)
 {
     if (!board)
@@ -93,16 +99,4 @@ void displayBoard(const Board* board)
     }
 
     printf("\n");
-}
-
-char getCellChar(const Cell cell)
-{
-    switch (cell)
-    {
-    case EMPTY: return '.';
-    case CROSS: return 'X';
-    case ZERO:  return 'O';
-    default:
-        assert(0 && "Unhandled cell type");
-    }
 }
