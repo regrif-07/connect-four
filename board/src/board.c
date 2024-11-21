@@ -1,8 +1,9 @@
 #include <board.h>
 
+#include <board_serializer.h>
+
 #include <error_codes.h>
 
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -65,19 +66,6 @@ void setCellAt(Board* board, const int rowIndex, const int columnIndex, const Ce
     board->cellArray[rowIndex * BOARD_WIDTH + columnIndex] = cell;
 }
 
-char getCellChar(const Cell cell)
-{
-    switch (cell)
-    {
-    case EMPTY: return '.';
-    case CROSS: return 'X';
-    case ZERO:  return 'O';
-    case STREAK:   return 'Y';
-    default:
-        assert(0 && "Unhandled cell type");
-    }
-}
-
 void displayBoard(const Board* board)
 {
     if (!board)
@@ -89,7 +77,7 @@ void displayBoard(const Board* board)
     {
         for (int columnIndex = 0; columnIndex < BOARD_WIDTH; ++columnIndex)
         {
-            printf("%c", getCellChar(getCellAt(board, rowIndex, columnIndex, nullptr)));
+            printf("%c", cellToChar(getCellAt(board, rowIndex, columnIndex, nullptr)));
         }
         printf("\n");
     }
