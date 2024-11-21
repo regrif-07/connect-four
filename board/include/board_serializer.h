@@ -10,5 +10,6 @@
 /// @note assertion will fail in case some kind of cell is unhandled (doesn't have corresponding char).
 char cellToChar(const Cell cell);
 
+Cell charToCell(const char cellChar, ErrorCode* errorCode);
 char* serializeBoard(const Board* board);
 Board* deserializeBoard(const char* serializedBoard, ErrorCode* errorCode);
