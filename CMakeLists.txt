@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.29.6)
 project(connect_four C)
 
 set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-nonnull -Wno-format-overflow")
 
 enable_testing()
 

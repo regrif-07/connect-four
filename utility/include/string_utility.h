@@ -1,19 +1,22 @@
 #pragma once
 
-#define DEFINE_TO_STRING_CONVERSION_FUNCTION(TYPE, TYPE_NAME, FORMAT_SPECIFIER) \
-    char* TYPE_NAME##ToString(TYPE value, ErrorCode* errorCode)                 \
-    {                                                                           \
-        const int stringLength = sprintf(nullptr, FORMAT_SPECIFIER, value);     \
-        char* string = malloc(sizeof(char) * stringLength + 1);                 \
-        if (!string)                                                            \
-        {                                                                       \
-            if (errorCode) *errorCode = ERROR_MEMORY;                           \
-            return nullptr;                                                     \
-        }                                                                       \
-                                                                                \
-        sprintf(string, FORMAT_SPECIFIER, value);                               \
-        return string;                                                          \
-    }                                                                           \
+#define DEFINE_TO_STRING_CONVERSION_FUNCTION(TYPE, TYPE_NAME, FORMAT_SPECIFIER)       \
+    char* TYPE_NAME##ToString(TYPE value, int* outStringLength, ErrorCode* errorCode) \
+    {                                                                                 \
+        const int stringLength = snprintf(nullptr, 0, FORMAT_SPECIFIER, value);       \
+        char* string = malloc(sizeof(char) * stringLength + 1);                       \
+        if (!string)                                                                  \
+        {                                                                             \
+            if (errorCode) *errorCode = ERROR_MEMORY;                                 \
+            return nullptr;                                                           \
+        }                                                                             \
+                                                                                      \
+        sprintf(string, FORMAT_SPECIFIER, value);                                     \
+                                                                                      \
+        if (outStringLength) *outStringLength = stringLength;                         \
+        if (errorCode) *errorCode = NO_ERROR;                                         \
+        return string;                                                                \
+    }                                                                                 \
 
 /// Check if the specified string is whitespace only.
 /// @param string string to check.

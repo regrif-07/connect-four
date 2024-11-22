@@ -17,3 +17,8 @@ add_executable(test_id_generator src/test_id_generator.c)
 target_link_libraries(test_id_generator PRIVATE utility unity)
 target_include_directories(test_id_generator PRIVATE "${unity_SOURCE_DIR}/src/")
 add_test(NAME TestIdGenerator COMMAND test_id_generator)
+
+add_executable(test_string_utility src/test_string_utility.c)
+target_link_libraries(test_string_utility PRIVATE utility unity)
+target_include_directories(test_string_utility PRIVATE "${unity_SOURCE_DIR}/src/")
+add_test(NAME TestStringUtility COMMAND test_string_utility)
