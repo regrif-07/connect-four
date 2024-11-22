@@ -12,7 +12,7 @@
 
 const char* GAME_CONTEXT_ID_COUNTER_FILEPATH = "game_context_id_counter";
 
-/// Display the initial information about the game (game name, players, board state).
+/// Display the initial information about the game (game header, game id, players, board state).
 /// @param gameContext current GameContext.
 void displayGameHeader(const GameContext* gameContext);
 
