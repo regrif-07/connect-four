@@ -14,6 +14,8 @@ constexpr int PLAYER_NAME_BUFFER_SIZE = 256;
 // serialization format: [id] "[cross player name]" "[zero player name]" [current player (X or O)] [serialized board] [game state (number)]
 const char* GAME_CONTEXT_SERIALIZE_FORMAT_STRING = "%d \"%s\" \"%s\" %c \"%s\" %d";
 const char* GAME_CONTEXT_DESERIALIZE_FORMAT_STRING = "%d \"%[^\"]\" \"%[^\"]\" %c \"%[^\"]\" %d";
+// %[^\"] - match any character except '"' (quote mark) character. This will stop functions supporting format strings
+// from being greedy. In other words, this will allow us to match a substring between quotation marks.
 
 char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
 {
@@ -36,7 +38,14 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
         cellToChar(gameContext->currentPlayer->cell),
         serializedBoard,
         (int)(gameContext->gameState));
+
     char* gameContextSerialized = malloc(sizeof(char) * gameContextSerializedLength + 1);
+    if (!gameContextSerialized)
+    {
+        if (errorCode) *errorCode = ERROR_MEMORY;
+        return nullptr;
+    }
+
     snprintf(gameContextSerialized, gameContextSerializedLength + 1, GAME_CONTEXT_SERIALIZE_FORMAT_STRING,
         gameContext->id,
         gameContext->crossPlayer.name,
@@ -87,7 +96,7 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     strcpy(crossPlayerName, crossPlayerNameBuffer);
     strcpy(zeroPlayerName, zeroPlayerNameBuffer);
 
-    Cell currentPlayerCell = charToCell(currentPlayerCellChar, errorCode);
+    const Cell currentPlayerCell = charToCell(currentPlayerCellChar, errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
         return nullptr;
@@ -102,6 +111,12 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     }
 
     GameContext* deserializedGameContext = malloc(sizeof(GameContext));
+    if (!deserializedGameContext)
+    {
+        if (errorCode) *errorCode = ERROR_MEMORY;
+        return nullptr;
+    }
+
     deserializedGameContext->id = id;
     deserializedGameContext->crossPlayer = (Player) { crossPlayerName, CROSS };
     deserializedGameContext->zeroPlayer = (Player) { zeroPlayerName, ZERO };
