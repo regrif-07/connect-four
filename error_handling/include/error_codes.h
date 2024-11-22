@@ -9,4 +9,6 @@ typedef enum
     ERROR_ARGUMENT_OUT_OF_RANGE = -3,
     ERROR_NULLPTR_ARGUMENT = -4,
     ERROR_MEMORY = -5,
+    ERROR_FILE_STATE = -6,
+    ERROR_FILE_IO = -7,
 } ErrorCode;

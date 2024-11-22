@@ -1,4 +1,4 @@
-#include <game.h>
+#include <game_context.h>
 
 #include <board.h>
 #include <error_codes.h>
