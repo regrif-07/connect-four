@@ -7,3 +7,8 @@ add_executable(test_board_serializer src/test_board_serializer.c)
 target_link_libraries(test_board_serializer PRIVATE board unity)
 target_include_directories(test_board_serializer PRIVATE "${unity_SOURCE_DIR}/src/")
 add_test(NAME TestBoardSerializer COMMAND test_board_serializer)
+
+add_executable(test_game_state src/test_game_state.c)
+target_link_libraries(test_game_state PRIVATE connect_four_core unity)
+target_include_directories(test_game_state PRIVATE "${unity_SOURCE_DIR}/src/")
+add_test(NAME TestGameState COMMAND test_game_state)
