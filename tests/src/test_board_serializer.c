@@ -97,8 +97,10 @@ void testCharToCellInvalid()
 
 void testSerializeBoard()
 {
-    char* serializedBoard = serializeBoard(g_testBoard);
+    ErrorCode errorCode;
+    char* serializedBoard = serializeBoard(g_testBoard, &errorCode);
 
+    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
     TEST_ASSERT_NOT_NULL(serializedBoard);
     TEST_ASSERT_EQUAL_STRING(serializedBoard, g_serializedTestBoard);
 
@@ -140,10 +142,12 @@ void testDeserializeBoardInvalidCharacter()
 
 void testSerializeDeserializeCycle()
 {
-    char* serializedBoard = serializeBoard(g_testBoard);
     ErrorCode errorCode;
-    Board* deserializedBoard = deserializeBoard(serializedBoard, &errorCode);
+    char* serializedBoard = serializeBoard(g_testBoard, &errorCode);
+    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_NOT_NULL(serializedBoard);
 
+    Board* deserializedBoard = deserializeBoard(serializedBoard, &errorCode);
     TEST_ASSERT_NOT_NULL(deserializedBoard);
     TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
 

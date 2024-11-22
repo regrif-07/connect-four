@@ -19,8 +19,10 @@ Cell charToCell(const char cellChar, ErrorCode* errorCode);
 
 /// Serialize the board into a plain text format (string).
 /// @param board board to serialize.
+/// @param errorCode out error parameter; ERROR_MEMORY in case serialized board string allocation failed,
+/// NO_ERROR otherwise.
 /// @return serialized board (string).
-char* serializeBoard(const Board* board);
+char* serializeBoard(const Board* board, ErrorCode* errorCode);
 
 /// Deserialize the board string into a Board structure.
 /// @param serializedBoard board serialized into string.

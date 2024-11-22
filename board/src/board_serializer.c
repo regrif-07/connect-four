@@ -37,9 +37,14 @@ Cell charToCell(const char cellChar, ErrorCode* errorCode)
     }
 }
 
-char* serializeBoard(const Board* board)
+char* serializeBoard(const Board* board, ErrorCode* errorCode)
 {
     char* serializedBoard = calloc(sizeof(char), TOTAL_CELLS + 1);
+    if (!serializedBoard)
+    {
+        if (errorCode) *errorCode = ERROR_MEMORY;
+        return nullptr;
+    }
 
     for (int cellIndex = 0; cellIndex < TOTAL_CELLS; ++cellIndex)
     {
@@ -47,6 +52,7 @@ char* serializeBoard(const Board* board)
     }
     serializedBoard[TOTAL_CELLS] = '\0';
 
+    if (errorCode) *errorCode = NO_ERROR;
     return serializedBoard;
 }
 
