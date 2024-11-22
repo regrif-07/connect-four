@@ -20,6 +20,6 @@ int loopReadIntegerInRange(const char* prompt, const int min, const int max);
 
 /// Ask user for a line.
 /// @param prompt prompt to be displayed before getting user input.
-/// @param discardEmpty discard empty input ("\n") or not. Input consisting of whitespaces is not considered empty.
+/// @param discardEmpty discard empty input or not. Whitespaces-only input is considered empty.
 /// @return line entered by the user (without newline character at the end).
 char* readLine(const char* prompt, const bool discardEmpty);

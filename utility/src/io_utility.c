@@ -1,6 +1,7 @@
 #include <io_utility.h>
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -73,6 +74,26 @@ char* readLine(const char* prompt, const bool discardEmpty)
             printf("Empty input is not supported.\n");
             continue;
         }
+
+        if (discardEmpty)
+        {
+            bool isWhitespaceOnly = true;
+            for (int charIndex = 0; charIndex < lineLen; ++charIndex)
+            {
+                if (!isspace(line[charIndex]))
+                {
+                    isWhitespaceOnly = false;
+                    break;
+                }
+            }
+
+            if (isWhitespaceOnly)
+            {
+                printf("Empty (whitespace only) input is not supported.\n");
+                continue;
+            }
+        }
+
         if (line[lineLen - 1] == '\n')
         {
             line[lineLen-- - 1] = '\0'; // remove the newline character at the end
