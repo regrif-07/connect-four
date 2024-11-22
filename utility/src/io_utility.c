@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <string_utility.h>
 
 constexpr int IO_BUFFER_SIZE = 4096;
 
@@ -74,24 +75,10 @@ char* readLine(const char* prompt, const bool discardEmpty)
             printf("Empty input is not supported.\n");
             continue;
         }
-
-        if (discardEmpty)
+        if (discardEmpty && isWhitespaceOnly(line))
         {
-            bool isWhitespaceOnly = true;
-            for (int charIndex = 0; charIndex < lineLen; ++charIndex)
-            {
-                if (!isspace(line[charIndex]))
-                {
-                    isWhitespaceOnly = false;
-                    break;
-                }
-            }
-
-            if (isWhitespaceOnly)
-            {
-                printf("Empty (whitespace only) input is not supported.\n");
-                continue;
-            }
+            printf("Empty input (whitespace-only) is not supported.\n");
+            continue;
         }
 
         if (line[lineLen - 1] == '\n')
