@@ -2,4 +2,4 @@
 
 #include <error_codes.h>
 
-long long GenerateNextId(const char* idCounterFilepath, ErrorCode* errorCode);
+long long generateNextId(const char* idCounterFilepath, ErrorCode* errorCode);

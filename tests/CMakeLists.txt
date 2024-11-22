@@ -12,3 +12,8 @@ add_executable(test_game_state src/test_game_state.c)
 target_link_libraries(test_game_state PRIVATE connect_four_core unity)
 target_include_directories(test_game_state PRIVATE "${unity_SOURCE_DIR}/src/")
 add_test(NAME TestGameState COMMAND test_game_state)
+
+add_executable(test_id_generator src/test_id_generator.c)
+target_link_libraries(test_id_generator PRIVATE utility unity)
+target_include_directories(test_id_generator PRIVATE "${unity_SOURCE_DIR}/src/")
+add_test(NAME TestIdGenerator COMMAND test_id_generator)

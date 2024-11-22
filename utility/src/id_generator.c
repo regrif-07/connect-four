@@ -4,12 +4,12 @@
 
 #include <stdio.h>
 
-long long loadInitialId(const char* idCounterFilepath, ErrorCode* errorCode);
+long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode);
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode);
 
-long long GenerateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
+long long generateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
 {
-    long long id = loadInitialId(idCounterFilepath, errorCode);
+    long long id = loadPreviousId(idCounterFilepath, errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
         return -1;
@@ -22,27 +22,30 @@ long long GenerateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
         return -1;
     }
 
+    if (errorCode) *errorCode = NO_ERROR;
     return id;
 }
 
-long long loadInitialId(const char* idCounterFilepath, ErrorCode* errorCode)
+long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode)
 {
     FILE* idCounterFile = fopen(idCounterFilepath, "r");
     if (!idCounterFile)
     {
+        if (errorCode) *errorCode = NO_ERROR;
         return 0;
     }
 
-    long long initialId;
-    if (fscanf(idCounterFile, "%lld", &initialId) != 1)
+    long long previousId;
+    if (fscanf(idCounterFile, "%lld", &previousId) != 1)
     {
+        fclose(idCounterFile);
         if (errorCode) *errorCode = ERROR_FILE_STATE;
         return -1;
     }
 
     if (errorCode) *errorCode = NO_ERROR;
     fclose(idCounterFile);
-    return initialId;
+    return previousId;
 }
 
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode)
@@ -56,9 +59,11 @@ void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorC
 
     if (fprintf(idCounterFile, "%lld\n", id) < 0)
     {
+        fclose(idCounterFile);
         if (errorCode) *errorCode = ERROR_FILE_IO;
         return;
     }
 
+    fclose(idCounterFile);
     if (errorCode) *errorCode = NO_ERROR;
 }
