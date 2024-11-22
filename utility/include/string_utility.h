@@ -1,5 +1,11 @@
 #pragma once
 
+/// Define a new to-string conversion function for TYPE.
+/// snprintf()-based conversion.
+/// @param TYPE type of value that will be converted to string
+/// @param TYPE_NAME name of type that will be used in the function name generation.
+/// @param FORMAT_SPECIFIER format specifier for the provided TYPE (%d for int, for example).
+/// Will be used in snprintf().
 #define DEFINE_TO_STRING_CONVERSION_FUNCTION(TYPE, TYPE_NAME, FORMAT_SPECIFIER)       \
     char* TYPE_NAME##ToString(TYPE value, int* outStringLength, ErrorCode* errorCode) \
     {                                                                                 \
