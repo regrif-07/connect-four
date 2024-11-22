@@ -3,11 +3,14 @@
 #include <board.h>
 #include <error_codes.h>
 #include <game_state.h>
+#include <id_generator.h>
 #include <io_utility.h>
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+const char* GAME_CONTEXT_ID_COUNTER_FILEPATH = "game_context_id_counter";
 
 /// Display the initial information about the game (game name, players, board state).
 /// @param gameContext current GameContext.
@@ -36,6 +39,12 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
     if (!gameContext)
     {
         if (errorCode) *errorCode = ERROR_MEMORY;
+        return nullptr;
+    }
+
+    gameContext->id = generateNextId(GAME_CONTEXT_ID_COUNTER_FILEPATH, errorCode);
+    if (errorCode && *errorCode != NO_ERROR)
+    {
         return nullptr;
     }
 
@@ -106,8 +115,9 @@ void displayGameHeader(const GameContext* gameContext)
     printf("*===*\n"
            "CONNECT FOUR\n"
            "*===*\n"
+           "Game ID: %lld\n"
            "%s ('X') VS %s ('O')\n"
-           "*===*\n", gameContext->crossPlayer.name, gameContext->zeroPlayer.name);
+           "*===*\n", gameContext->id, gameContext->crossPlayer.name, gameContext->zeroPlayer.name);
 
     printf("Initial board state:\n");
     displayBoard(gameContext->board);

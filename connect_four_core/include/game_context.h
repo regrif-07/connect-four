@@ -14,6 +14,7 @@ typedef struct
 /// Represent current state/context of a game.
 typedef struct
 {
+    long long id;
     Player crossPlayer;
     Player zeroPlayer;
     Player* currentPlayer;
