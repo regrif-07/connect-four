@@ -4,7 +4,18 @@
 
 #include <stdio.h>
 
+/// Load previous id from the counter file or return initial id - 1 (because it will be incremented afterward).
+/// @param idCounterFilepath filepath of the id counter.
+/// @param errorCode output error parameter; ERROR_FILE_STATE in case there was an invalid id in the counter file,
+/// NO_ERROR otherwise.
+/// @return 0 in case no counter file was found, previous index from counter file otherwise.
 long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode);
+
+/// Save the specified id to the counter file.
+/// @param idCounterFilepath filepath of the id counter.
+/// @param id id to save.
+/// @param errorCode out error parameter; ERROR_FILE_IO in case file IO operation (open file/write to file) failed,
+/// NO_ERROR otherwise.
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode);
 
 long long generateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
