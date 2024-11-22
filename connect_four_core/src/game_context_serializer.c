@@ -12,31 +12,38 @@
 constexpr int PLAYER_NAME_BUFFER_SIZE = 256;
 
 // serialization format: [id] "[cross player name]" "[zero player name]" [current player (X or O)] [serialized board] [game state (number)]
-const char* GAME_CONTEXT_FORMAT_STRING = "%d \"%s\" \"%s\" %c %s %d";
+const char* GAME_CONTEXT_SERIALIZE_FORMAT_STRING = "%d \"%s\" \"%s\" %c \"%s\" %d";
+const char* GAME_CONTEXT_DESERIALIZE_FORMAT_STRING = "%d \"%[^\"]\" \"%[^\"]\" %c \"%[^\"]\" %d";
 
 char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
 {
+    if (!gameContext)
+    {
+        if (errorCode) *errorCode = ERROR_NULLPTR_ARGUMENT;
+        return nullptr;
+    }
+
     char* serializedBoard = serializeBoard(gameContext->board, errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
         return nullptr;
     }
 
-    const int gameContextSerializedLength = snprintf(nullptr, 0, GAME_CONTEXT_FORMAT_STRING,
+    const int gameContextSerializedLength = snprintf(nullptr, 0, GAME_CONTEXT_SERIALIZE_FORMAT_STRING,
         gameContext->id,
         gameContext->crossPlayer.name,
         gameContext->zeroPlayer.name,
-        gameContext->currentPlayer->cell,
+        cellToChar(gameContext->currentPlayer->cell),
         serializedBoard,
-        gameContext->gameState);
+        (int)(gameContext->gameState));
     char* gameContextSerialized = malloc(sizeof(char) * gameContextSerializedLength + 1);
-    snprintf(gameContextSerialized, gameContextSerializedLength, GAME_CONTEXT_FORMAT_STRING,
+    snprintf(gameContextSerialized, gameContextSerializedLength + 1, GAME_CONTEXT_SERIALIZE_FORMAT_STRING,
         gameContext->id,
         gameContext->crossPlayer.name,
         gameContext->zeroPlayer.name,
-        gameContext->currentPlayer->cell,
+        cellToChar(gameContext->currentPlayer->cell),
         serializedBoard,
-        gameContext->gameState);
+        (int)(gameContext->gameState));
 
     if (errorCode) *errorCode = NO_ERROR;
     return gameContextSerialized;
@@ -44,20 +51,26 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
 
 GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode* errorCode)
 {
+    if (!serializedGameContext)
+    {
+        if (errorCode) *errorCode = ERROR_NULLPTR_ARGUMENT;
+        return nullptr;
+    }
+
     int id;
     char crossPlayerNameBuffer[PLAYER_NAME_BUFFER_SIZE];
     char zeroPlayerNameBuffer[PLAYER_NAME_BUFFER_SIZE];
-    Cell currentPlayerCell;
+    char currentPlayerCellChar;
     char serializedBoard[TOTAL_CELLS];
-    GameState gameState;
+    int gameStateInteger;
 
-    const int elementsRead = sscanf(serializedGameContext, GAME_CONTEXT_FORMAT_STRING,
+    const int elementsRead = sscanf(serializedGameContext, GAME_CONTEXT_DESERIALIZE_FORMAT_STRING,
         &id,
         &crossPlayerNameBuffer,
         &zeroPlayerNameBuffer,
-        &currentPlayerCell,
+        &currentPlayerCellChar,
         &serializedBoard,
-        &gameState);
+        &gameStateInteger);
     if (elementsRead != 6)
     {
         if (errorCode) *errorCode = ERROR_INVALID_ARGUMENT;
@@ -73,6 +86,12 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     }
     strcpy(crossPlayerName, crossPlayerNameBuffer);
     strcpy(zeroPlayerName, zeroPlayerNameBuffer);
+
+    Cell currentPlayerCell = charToCell(currentPlayerCellChar, errorCode);
+    if (errorCode && *errorCode != NO_ERROR)
+    {
+        return nullptr;
+    }
 
     Board* deserializedBoard = deserializeBoard(serializedBoard, errorCode);
     if (errorCode && *errorCode != NO_ERROR)
@@ -90,7 +109,7 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
                                              &deserializedGameContext->crossPlayer :
                                              &deserializedGameContext->zeroPlayer;
     deserializedGameContext->board = deserializedBoard;
-    deserializedGameContext->gameState = gameState;
+    deserializedGameContext->gameState = (GameState)(gameStateInteger);
 
     if (errorCode) *errorCode = NO_ERROR;
     return deserializedGameContext;

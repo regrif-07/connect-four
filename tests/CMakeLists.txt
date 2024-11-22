@@ -22,3 +22,8 @@ add_executable(test_string_utility src/test_string_utility.c)
 target_link_libraries(test_string_utility PRIVATE utility unity)
 target_include_directories(test_string_utility PRIVATE "${unity_SOURCE_DIR}/src/")
 add_test(NAME TestStringUtility COMMAND test_string_utility)
+
+add_executable(test_game_context_serializer src/test_game_context_serializer.c)
+target_link_libraries(test_game_context_serializer PRIVATE connect_four_core unity)
+target_include_directories(test_game_context_serializer PRIVATE "${unity_SOURCE_DIR}/src/")
+add_test(NAME TestGameContextSerializer COMMAND test_game_context_serializer)
