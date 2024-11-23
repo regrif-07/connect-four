@@ -58,7 +58,7 @@ void testAssertEqualBoards(const Board* firstBoard, const Board* secondBoard)
 {
     for (int cellIndex = 0; cellIndex < TOTAL_CELLS; ++cellIndex)
     {
-        TEST_ASSERT_EQUAL(firstBoard->cellArray[cellIndex], secondBoard->cellArray[cellIndex]);
+        TEST_ASSERT_EQUAL_INT(firstBoard->cellArray[cellIndex], secondBoard->cellArray[cellIndex]);
     }
 }
 
@@ -74,17 +74,17 @@ void testCharToCellValid()
 {
     ErrorCode errorCode;
 
-    TEST_ASSERT_EQUAL(EMPTY, charToCell('.', &errorCode));
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(EMPTY, charToCell('.', &errorCode));
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
 
-    TEST_ASSERT_EQUAL(CROSS, charToCell('X', &errorCode));
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(CROSS, charToCell('X', &errorCode));
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
 
-    TEST_ASSERT_EQUAL(ZERO, charToCell('O', &errorCode));
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(ZERO, charToCell('O', &errorCode));
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
 
-    TEST_ASSERT_EQUAL(STREAK, charToCell('Y', &errorCode));
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(STREAK, charToCell('Y', &errorCode));
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
 }
 
 void testCharToCellInvalid()
@@ -92,7 +92,7 @@ void testCharToCellInvalid()
     ErrorCode errorCode;
 
     charToCell('\0', &errorCode);
-    TEST_ASSERT_EQUAL(ERROR_INVALID_ARGUMENT, errorCode);
+    TEST_ASSERT_EQUAL_INT(ERROR_INVALID_ARGUMENT, errorCode);
 }
 
 void testSerializeBoard()
@@ -100,7 +100,7 @@ void testSerializeBoard()
     ErrorCode errorCode;
     char* serializedBoard = serializeBoard(g_testBoard, &errorCode);
 
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_NOT_NULL(serializedBoard);
     TEST_ASSERT_EQUAL_STRING(serializedBoard, g_serializedTestBoard);
 
@@ -112,8 +112,8 @@ void testDeserializeBoardValid()
     ErrorCode errorCode;
     Board* deserializedBoard = deserializeBoard(g_serializedTestBoard, &errorCode);
 
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_NOT_NULL(deserializedBoard);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
 
     testAssertEqualBoards(deserializedBoard, g_testBoard);
 
@@ -126,8 +126,8 @@ void testDeserializeBoardInvalidLength()
     const char* invalidSerializedBoard = "X.O";
     const Board* board = deserializeBoard(invalidSerializedBoard, &errorCode);
 
+    TEST_ASSERT_EQUAL_INT(ERROR_INVALID_ARGUMENT, errorCode);
     TEST_ASSERT_NULL(board);
-    TEST_ASSERT_EQUAL(ERROR_INVALID_ARGUMENT, errorCode);
 }
 
 void testDeserializeBoardInvalidCharacter()
@@ -136,20 +136,20 @@ void testDeserializeBoardInvalidCharacter()
     const char* invalidSerializedBoard = ".......X.....X.....O.......`.....O..X.....";
     const Board* board = deserializeBoard(invalidSerializedBoard, &errorCode);
 
+    TEST_ASSERT_EQUAL_INT(ERROR_INVALID_ARGUMENT, errorCode);
     TEST_ASSERT_NULL(board);
-    TEST_ASSERT_EQUAL(ERROR_INVALID_ARGUMENT, errorCode);
 }
 
 void testSerializeDeserializeCycle()
 {
     ErrorCode errorCode;
     char* serializedBoard = serializeBoard(g_testBoard, &errorCode);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_NOT_NULL(serializedBoard);
 
     Board* deserializedBoard = deserializeBoard(serializedBoard, &errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_NOT_NULL(deserializedBoard);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
 
     testAssertEqualBoards(deserializedBoard, g_testBoard);
 
@@ -163,13 +163,22 @@ int main()
 
     initializeGlobalContext();
 
+    // tests for cellToChar()
     RUN_TEST(testCellToChar);
+
+    // tests for charToCell()
     RUN_TEST(testCharToCellValid);
     RUN_TEST(testCharToCellInvalid);
+
+    // tests for serializeBoard()
     RUN_TEST(testSerializeBoard);
+
+    // tests for deserializeBoard()
     RUN_TEST(testDeserializeBoardValid);
     RUN_TEST(testDeserializeBoardInvalidLength);
     RUN_TEST(testDeserializeBoardInvalidCharacter);
+
+    // complex tests
     RUN_TEST(testSerializeDeserializeCycle);
 
     return UNITY_END();

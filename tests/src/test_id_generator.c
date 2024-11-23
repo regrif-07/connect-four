@@ -46,7 +46,7 @@ void testGenerateNextIdFileDoesNotExist(void)
     ErrorCode errorCode;
     const long long id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
 
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_EQUAL_INT64(1, id);
     verifyTestFileId(1);
 }
@@ -58,7 +58,7 @@ void testGenerateNextIdFileExistsValidData(void)
     ErrorCode errorCode;
     const long long id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
 
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_EQUAL_INT64(43, id);
     verifyTestFileId(43);
 }
@@ -70,7 +70,7 @@ void testGenerateNextIdFileExistsInvalidData(void)
     ErrorCode errorCode;
     const long long id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
 
-    TEST_ASSERT_EQUAL(ERROR_FILE_STATE, errorCode);
+    TEST_ASSERT_EQUAL_INT(ERROR_FILE_STATE, errorCode);
 }
 
 void testGenerateNextIdMultipleGenerations()
@@ -78,17 +78,17 @@ void testGenerateNextIdMultipleGenerations()
     ErrorCode errorCode;
 
     long long id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_EQUAL_INT64(1, id);
     verifyTestFileId(1);
 
     id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_EQUAL_INT64(2, id);
     verifyTestFileId(2);
 
     id = generateNextId(TEST_ID_COUNTER_FILEPATH, &errorCode);
-    TEST_ASSERT_EQUAL(NO_ERROR, errorCode);
+    TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
     TEST_ASSERT_EQUAL_INT64(3, id);
     verifyTestFileId(3);
 }
@@ -97,6 +97,7 @@ int main(void)
 {
     UNITY_BEGIN();
 
+    // tests for generateNextId()
     RUN_TEST(testGenerateNextIdFileDoesNotExist);
     RUN_TEST(testGenerateNextIdFileExistsValidData);
     RUN_TEST(testGenerateNextIdFileExistsInvalidData);

@@ -63,6 +63,15 @@ void testSerializeGameContextValid()
     freeGameContext(gameContext);
 }
 
+void testSerializeGameContextNullptr()
+{
+    ErrorCode errorCode;
+    const char* serializedContext = serializeGameContext(nullptr, &errorCode);
+
+    TEST_ASSERT_EQUAL_INT(ERROR_NULLPTR_ARGUMENT, errorCode);
+    TEST_ASSERT_NULL(serializedContext);
+}
+
 void testDeserializeGameContextValid()
 {
     const char* testSerializedContext = "42 \"Alice\" \"Bob\" X \"....................................XO.XO.\" 0";
@@ -81,15 +90,6 @@ void testDeserializeGameContextValid()
     TEST_ASSERT_EQUAL_INT(IN_PROCESS, deserializedContext->gameState);
 
     freeGameContext(deserializedContext);
-}
-
-void testSerializeGameContextNullptr()
-{
-    ErrorCode errorCode;
-    const char* serializedContext = serializeGameContext(nullptr, &errorCode);
-
-    TEST_ASSERT_EQUAL_INT(ERROR_NULLPTR_ARGUMENT, errorCode);
-    TEST_ASSERT_NULL(serializedContext);
 }
 
 void testDeserializeGameContextInvalidFormat()
@@ -118,9 +118,12 @@ int main()
 {
     UNITY_BEGIN();
 
+    // tests for serializeGameContext()
     RUN_TEST(testSerializeGameContextValid);
-    RUN_TEST(testDeserializeGameContextValid);
     RUN_TEST(testSerializeGameContextNullptr);
+
+    // tests for deserializeGameContext()
+    RUN_TEST(testDeserializeGameContextValid);
     RUN_TEST(testDeserializeGameContextInvalidFormat);
     RUN_TEST(testDeserializeGameContextInvalidBoardFormat);
 

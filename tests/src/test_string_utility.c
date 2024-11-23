@@ -29,7 +29,7 @@ int main(void)
 {
     UNITY_BEGIN();
 
-    // tests for isWhitespaceOnly
+    // tests for isWhitespaceOnly()
     RUN_TEST(testIsWhitespaceOnlyAllWhitespace);
     RUN_TEST(testIsWhitespaceOnlyMixed);
     RUN_TEST(testIsWhitespaceOnlyEmpty);
