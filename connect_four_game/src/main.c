@@ -154,7 +154,9 @@ void listAllSavedGamesOption()
 
 void listAllSavedGamesParticularPlayerOption()
 {
-
+    char* playerNameFilter = readLine("Enter the name of one of the players to search: ", true);
+    listAllSavedGamesByPlayerName(playerNameFilter);
+    free(playerNameFilter);
 }
 
 void startGameWrapper(GameContext* gameContext)

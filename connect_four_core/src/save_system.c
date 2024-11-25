@@ -5,10 +5,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 const char* SAVES_ID_COUNTER_FILEPATH = "saves_id_counter";
 const char* SAVES_FILEPATH = "results.txt";
 
+void displayShortGameInfo(const long long saveId, const GameContext* gameContext);
 int countEmptyCells(const Board* board);
 
 long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
@@ -137,12 +139,66 @@ void listAllSavedGames()
             continue;
         }
 
-        printf("ID: %lld; %s ('X') vs %s ('O'); %d empty cells\n",
+        displayShortGameInfo(saveId, gameContext);
+
+        freeGameContext(gameContext);
+    }
+}
+
+void listAllSavedGamesByPlayerName(const char* playerNameFilter)
+{
+    ErrorCode errorCode;
+
+    const long long lastSaveId = loadPreviousId(SAVES_ID_COUNTER_FILEPATH, &errorCode);
+    if (errorCode != NO_ERROR)
+    {
+        return;
+    }
+
+    if (lastSaveId == ID_START)
+    {
+        printf("No saved games were found.\n");
+        return;
+    }
+
+    bool oneMatched = false;
+    printf("List of all saved games where at least one player is \"%s\":\n", playerNameFilter);
+    for (long long saveId = ID_START; saveId <= lastSaveId; ++saveId)
+    {
+        GameContext* gameContext = loadGameBySaveId(saveId, &errorCode);
+        if (!gameContext)
+        {
+            if (errorCode != NO_ERROR)
+            {
+                printf("Unexpected error occurred while trying to list all saved games.");
+                exit(EXIT_FAILURE);
+            }
+
+            continue;
+        }
+
+        if (strcmp(gameContext->crossPlayer.name, playerNameFilter) == 0 ||
+            strcmp(gameContext->zeroPlayer.name, playerNameFilter) == 0)
+        {
+            displayShortGameInfo(saveId, gameContext);
+            oneMatched = true;
+        }
+
+        freeGameContext(gameContext);
+    }
+
+    if (!oneMatched)
+    {
+        printf("No suitable saved games were found.\n");
+    }
+}
+
+void displayShortGameInfo(const long long saveId, const GameContext* gameContext)
+{
+    printf("ID: %lld; %s ('X') vs %s ('O'); %d empty cells\n",
             saveId,
             gameContext->crossPlayer.name, gameContext->zeroPlayer.name,
             countEmptyCells(gameContext->board));
-        freeGameContext(gameContext);
-    }
 }
 
 int countEmptyCells(const Board* board)

@@ -5,3 +5,4 @@
 long long saveGame(const GameContext* gameContext, ErrorCode* errorCode);
 GameContext* loadGameBySaveId(const long long targetSaveId, ErrorCode* errorCode);
 void listAllSavedGames();
+void listAllSavedGamesByPlayerName(const char* playerNameFilter);
