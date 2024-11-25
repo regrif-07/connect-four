@@ -1,5 +1,7 @@
 #pragma once
 
+#include <error_codes.h>
+
 /// Read user input and scan integer from it.
 /// @param out out parameter that will hold an entered integer.
 /// @return true if integer scanning succeeded; false otherwise.
@@ -21,5 +23,6 @@ int loopReadIntegerInRange(const char* prompt, const int min, const int max);
 /// Ask user for a line.
 /// @param prompt prompt to be displayed before getting user input.
 /// @param discardEmpty discard empty input or not. Whitespaces-only input is considered empty.
+/// @param errorCode out error parameter; ERROR_MEMORY in case line allocation failed, NO_ERROR otherwise.
 /// @return heap allocated line entered by the user (without newline character at the end).
-char* readLine(const char* prompt, const bool discardEmpty);
+char* readLine(const char* prompt, const bool discardEmpty, ErrorCode* errorCode);

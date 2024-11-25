@@ -160,8 +160,17 @@ void listAllSavedGamesOption()
 
 void listAllSavedGamesParticularPlayerOption()
 {
-    char* playerNameFilter = readLine("Enter the name of one of the players to search: ", true);
+    ErrorCode errorCode;
+
+    char* playerNameFilter = readLine("Enter the name of one of the players to search: ", true, &errorCode);
+    if (!playerNameFilter)
+    {
+        printf("Unexpected error occurred while trying to process user input.\n");
+        exit(EXIT_FAILURE);
+    }
+
     listAllSavedGamesByPlayerName(DEFAULT_SAVES_FILEPATH, playerNameFilter);
+
     free(playerNameFilter);
 }
 
@@ -199,7 +208,7 @@ GameContext* loadGameByIdWrapper(const long long saveId)
     {
         if (errorCode != NO_ERROR)
         {
-            printf("Unexpected error occurred while trying to load the specified save.");
+            printf("Unexpected error occurred while trying to load the specified save.\n");
             exit(EXIT_FAILURE);
         }
 

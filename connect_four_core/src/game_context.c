@@ -14,14 +14,23 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
         return nullptr;
     }
 
-    gameContext->crossPlayer = (Player) {
-        readLine("Enter the name of the cross ('X') player: ", true),
-        CROSS
-    };
-    gameContext->zeroPlayer = (Player) {
-        readLine("Enter the name of the zero ('O') player: ", true),
-        ZERO
-    };
+    char* crossPlayerName = readLine("Enter the name of the cross ('X') player: ", true, errorCode);
+    if (!crossPlayerName)
+    {
+        free(gameContext);
+        return nullptr;
+    }
+
+    char* zeroPlayerName = readLine("Enter the name of the zero ('O') player: ", true, errorCode);
+    if (!zeroPlayerName)
+    {
+        free(gameContext);
+        free(crossPlayerName);
+        return nullptr;
+    }
+
+    gameContext->crossPlayer = (Player) { crossPlayerName, CROSS };
+    gameContext->zeroPlayer = (Player) { zeroPlayerName, ZERO };
     gameContext->currentPlayer = &(gameContext->crossPlayer);
 
     gameContext->board = createEmptyBoard(errorCode);

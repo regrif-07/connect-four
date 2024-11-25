@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+constexpr int SAVE_ENTRY_LINE_BUFFER_SIZE = 1024;
+
 const char* SAVES_ID_COUNTER_FILEPATH = "saves_id_counter";
 const char* DEFAULT_SAVES_FILEPATH = "results.txt";
 
@@ -68,6 +70,8 @@ long long saveGame(const char* savesFilepath, const GameContext* gameContext, Er
 
 GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetSaveId, ErrorCode* errorCode)
 {
+    static char lineBuffer[SAVE_ENTRY_LINE_BUFFER_SIZE];
+
     FILE* savesFile = fopen(savesFilepath, "r");
     if (!savesFile)
     {
@@ -76,29 +80,35 @@ GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetS
     }
 
     char* serializedGameContext = nullptr;
-    char* line = nullptr;
-
-    size_t buffLen = 0;
 
     bool matchFound = false;
-    while (getline(&line, &buffLen, savesFile) != -1)
+    while (fgets(lineBuffer, sizeof(lineBuffer), savesFile) != nullptr)
     {
         long long saveId = ID_NOT_FOUND;
-        if (sscanf(line, "%lld %m[^\n]", &saveId, &serializedGameContext) == 2)
-        {
-            if (saveId == targetSaveId)
-            {
-                matchFound = true;
-                break;
-            }
 
+        char* contextStart = strchr(lineBuffer, ' '); // find the first space
+        if (contextStart)
+        {
+            *contextStart = '\0';  // split the line into two parts
+            saveId = atoll(lineBuffer);  // convert the first part to a save ID
+            serializedGameContext = strdup(contextStart + 1);  // copy the rest as the context
+        }
+
+        if (saveId == targetSaveId)
+        {
+            matchFound = true;
+            break;
+        }
+
+        if (serializedGameContext)
+        {
             free(serializedGameContext);
+            serializedGameContext = nullptr;
         }
     }
 
     if (!matchFound)
     {
-        free(line);
         if (errorCode) *errorCode = NO_ERROR;
         return nullptr;
     }
@@ -106,13 +116,11 @@ GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetS
     GameContext* deserializedGameContext = deserializeGameContext(serializedGameContext, errorCode);
     if (!deserializedGameContext)
     {
-        free(line);
         free(serializedGameContext);
         if (errorCode) *errorCode = ERROR_FILE_STATE;
         return nullptr;
     }
 
-    free(line);
     free(serializedGameContext);
     if (errorCode) *errorCode = NO_ERROR;
     return deserializedGameContext;

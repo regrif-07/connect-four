@@ -45,6 +45,7 @@ GameState checkGameStateAndMarkWinningStreak(Board* board, const int lastMoveRow
 {
     if (isDraw(board))
     {
+        if (errorCode) *errorCode = NO_ERROR;
         return DRAW;
     }
 
