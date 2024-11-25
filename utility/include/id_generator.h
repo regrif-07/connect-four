@@ -9,7 +9,7 @@ extern const long long ID_NOT_FOUND;
 /// @param idCounterFilepath filepath of the id counter.
 /// @param errorCode output error parameter; ERROR_FILE_STATE in case there was an invalid id in the counter file,
 /// NO_ERROR otherwise.
-/// @return 0 in case no counter file was found, previous index from counter file otherwise.
+/// @return ID_START in case NO counter file was found, previous index from counter file otherwise.
 long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode);
 
 /// Generate next id with the counter specified by idCounterFilepath.

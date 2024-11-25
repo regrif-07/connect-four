@@ -4,7 +4,8 @@
 
 #include <stdio.h>
 
-const long long ID_START = 1;
+// this id will not occur in any entities because it is actually used as start id for PREVIOUS id, so the first ID is ID_START + 1.
+const long long ID_START = 0;
 const long long ID_NOT_FOUND = -1;
 
 /// Save the specified id to the counter file.
@@ -14,14 +15,13 @@ const long long ID_NOT_FOUND = -1;
 /// NO_ERROR otherwise.
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode);
 
-
 long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode)
 {
     FILE* idCounterFile = fopen(idCounterFilepath, "r");
     if (!idCounterFile)
     {
         if (errorCode) *errorCode = NO_ERROR;
-        return ID_START - 1;
+        return ID_START;
     }
 
     long long previousId;
