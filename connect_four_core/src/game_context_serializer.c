@@ -12,8 +12,8 @@
 constexpr int PLAYER_NAME_BUFFER_SIZE = 256;
 
 // serialization format: [id] "[cross player name]" "[zero player name]" [current player (X or O)] [serialized board] [game state (number)]
-const char* GAME_CONTEXT_SERIALIZE_FORMAT_STRING = "%d \"%s\" \"%s\" %c \"%s\" %d";
-const char* GAME_CONTEXT_DESERIALIZE_FORMAT_STRING = "%d \"%[^\"]\" \"%[^\"]\" %c \"%[^\"]\" %d";
+const char* GAME_CONTEXT_SERIALIZE_FORMAT_STRING = "\"%s\" \"%s\" %c \"%s\" %d";
+const char* GAME_CONTEXT_DESERIALIZE_FORMAT_STRING = "\"%[^\"]\" \"%[^\"]\" %c \"%[^\"]\" %d";
 // %[^\"] - match any character except '"' (quote mark) character. This will stop functions supporting format strings
 // from being greedy. In other words, this will allow us to match a substring between quotation marks.
 
@@ -32,7 +32,6 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
     }
 
     const int gameContextSerializedLength = snprintf(nullptr, 0, GAME_CONTEXT_SERIALIZE_FORMAT_STRING,
-        gameContext->id,
         gameContext->crossPlayer.name,
         gameContext->zeroPlayer.name,
         cellToChar(gameContext->currentPlayer->cell),
@@ -47,7 +46,6 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
     }
 
     snprintf(gameContextSerialized, gameContextSerializedLength + 1, GAME_CONTEXT_SERIALIZE_FORMAT_STRING,
-        gameContext->id,
         gameContext->crossPlayer.name,
         gameContext->zeroPlayer.name,
         cellToChar(gameContext->currentPlayer->cell),
@@ -66,7 +64,6 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
         return nullptr;
     }
 
-    int id;
     char crossPlayerNameBuffer[PLAYER_NAME_BUFFER_SIZE];
     char zeroPlayerNameBuffer[PLAYER_NAME_BUFFER_SIZE];
     char currentPlayerCellChar;
@@ -74,13 +71,12 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     int gameStateInteger;
 
     const int elementsRead = sscanf(serializedGameContext, GAME_CONTEXT_DESERIALIZE_FORMAT_STRING,
-        &id,
         &crossPlayerNameBuffer,
         &zeroPlayerNameBuffer,
         &currentPlayerCellChar,
         &serializedBoard,
         &gameStateInteger);
-    if (elementsRead != 6)
+    if (elementsRead != 5)
     {
         if (errorCode) *errorCode = ERROR_INVALID_ARGUMENT;
         return nullptr;
@@ -117,7 +113,6 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
         return nullptr;
     }
 
-    deserializedGameContext->id = id;
     deserializedGameContext->crossPlayer = (Player) { crossPlayerName, CROSS };
     deserializedGameContext->zeroPlayer = (Player) { zeroPlayerName, ZERO };
     deserializedGameContext->currentPlayer = (currentPlayerCell == CROSS) ?

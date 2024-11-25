@@ -1,5 +1,6 @@
 add_library(connect_four_core STATIC
         src/game_context.c
+        src/game_functionality.c
         src/game_context_serializer.c
         src/game_state.c
 )

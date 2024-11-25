@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <game_context.h>
+#include <game_functionality.h>
 #include <io_utility.h>
 
 #include <stdio.h>

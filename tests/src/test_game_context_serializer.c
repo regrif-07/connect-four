@@ -20,8 +20,6 @@ GameContext* createTestGameContext()
     GameContext* gameContext = malloc(sizeof(GameContext));
     TEST_ASSERT_NOT_NULL(gameContext);
 
-    gameContext->id = 42;
-
     gameContext->crossPlayer.name = strdup("Alice");
     gameContext->crossPlayer.cell = CROSS;
 
@@ -52,7 +50,6 @@ void testSerializeGameContextValid()
     TEST_ASSERT_EQUAL_INT(NO_ERROR, errorCode);
 
     // basic checks on serialized string
-    TEST_ASSERT_TRUE(strstr(serializedContext, "42") != nullptr);
     TEST_ASSERT_TRUE(strstr(serializedContext, "\"Alice\"") != nullptr);
     TEST_ASSERT_TRUE(strstr(serializedContext, "\"Bob\"") != nullptr);
     TEST_ASSERT_TRUE(strstr(serializedContext, "X") != nullptr);
@@ -74,7 +71,7 @@ void testSerializeGameContextNullptr()
 
 void testDeserializeGameContextValid()
 {
-    const char* testSerializedContext = "42 \"Alice\" \"Bob\" X \"....................................XO.XO.\" 0";
+    const char* testSerializedContext = "\"Alice\" \"Bob\" X \"....................................XO.XO.\" 0";
 
     ErrorCode errorCode = NO_ERROR;
     GameContext* deserializedContext = deserializeGameContext(testSerializedContext, &errorCode);
@@ -83,7 +80,6 @@ void testDeserializeGameContextValid()
     TEST_ASSERT_NOT_NULL(deserializedContext);
 
     // verify deserialized context details
-    TEST_ASSERT_EQUAL_INT(42, deserializedContext->id);
     TEST_ASSERT_EQUAL_STRING("Alice", deserializedContext->crossPlayer.name);
     TEST_ASSERT_EQUAL_STRING("Bob", deserializedContext->zeroPlayer.name);
     TEST_ASSERT_EQUAL_INT(CROSS, deserializedContext->currentPlayer->cell);
@@ -105,7 +101,7 @@ void testDeserializeGameContextInvalidFormat()
 
 void testDeserializeGameContextInvalidBoardFormat()
 {
-    const char* invalidSerializedContext = "42 \"Alice\" \"Bob\" X \"..............`............`........XO.XO.\" 0";
+    const char* invalidSerializedContext = "\"Alice\" \"Bob\" X \"..............`............`........XO.XO.\" 0";
 
     ErrorCode errorCode;
     const GameContext* deserializedContext = deserializeGameContext(invalidSerializedContext, &errorCode);
