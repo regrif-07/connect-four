@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.29.6)
+cmake_minimum_required(VERSION 3.28)
 project(connect_four C)
 
 set(CMAKE_C_STANDARD 23)
