@@ -10,7 +10,14 @@
 const char* SAVES_ID_COUNTER_FILEPATH = "saves_id_counter";
 const char* SAVES_FILEPATH = "results.txt";
 
+/// Display short info about the provided game context (with save id).
+/// @param saveId id of the save.
+/// @param gameContext game context to be displayed.
 void displayShortGameInfo(const long long saveId, const GameContext* gameContext);
+
+/// Count the amount of empty cells on the provided board.
+/// @param board board where counting will be processed.
+/// @return number of empty cells on the provided board.
 int countEmptyCells(const Board* board);
 
 long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)

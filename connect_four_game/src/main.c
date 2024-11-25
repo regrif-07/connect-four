@@ -19,7 +19,13 @@ void listAllSavedGamesOption();
 void listAllSavedGamesParticularPlayerOption();
 
 // others
+/// Start the game wrapper that will start the game and manage the player notification about game results.
+/// @param gameContext context of the game to start
 void startGameWrapper(GameContext* gameContext);
+
+/// Try to load the game using its save's id. Notify the player about the status of operation.
+/// @param saveId id of the save to load.
+/// @return heap allocated context of the loaded game or nullptr if loading failed.
 GameContext* loadGameByIdWrapper(const long long saveId);
 
 int main(void)
