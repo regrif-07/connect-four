@@ -10,6 +10,7 @@
 void startMainMenu();
 void startSavesMenu();
 void startGameWrapper(GameContext* gameContext);
+GameContext* loadGameByIdWrapper(const long long saveId);
 
 int main(void)
 {
@@ -89,23 +90,16 @@ void startSavesMenu()
             break;
 
         case 4:
-            long long saveId = loopReadInteger("Enter the id of the save to load: ");
+            const long long saveId = loopReadInteger("Enter the id of the save to load: ");
 
-            ErrorCode errorCode;
-            GameContext* loadedGame = loadGameById(saveId, &errorCode);
+            GameContext* loadedGame = loadGameByIdWrapper(saveId);
             if (!loadedGame)
             {
-                if (errorCode && errorCode != NO_ERROR)
-                {
-                    printf("Unexpected error occurred while trying to load the specified save.");
-                    exit(EXIT_FAILURE);
-                }
-
-                printf("Save with id %lld was not found.\n", saveId);
                 break;
             }
 
             startGameWrapper(loadedGame);
+
             freeGameContext(loadedGame);
 
             break;
@@ -145,4 +139,23 @@ void startGameWrapper(GameContext* gameContext)
     default:
         assert(false && "unhandled game state");
     }
+}
+
+GameContext* loadGameByIdWrapper(const long long saveId)
+{
+    ErrorCode errorCode;
+    GameContext* loadedGame = loadGameBySaveId(saveId, &errorCode);
+    if (!loadedGame)
+    {
+        if (errorCode && errorCode != NO_ERROR)
+        {
+            printf("Unexpected error occurred while trying to load the specified save.");
+            exit(EXIT_FAILURE);
+        }
+
+        printf("Save with id %lld was not found.\n", saveId);
+        return nullptr;
+    }
+
+    return loadedGame;
 }
