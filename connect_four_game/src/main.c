@@ -15,10 +15,12 @@ void startSavesMenu();
 void playNewGameMenuOption();
 void loadGameMenuOption();
 void showBoardOfSavedGameOption();
+void listAllSavedGamesOption();
+void listAllSavedGamesParticularPlayerOption();
 
 // others
 void startGameWrapper(GameContext* gameContext);
-GameContext* loadGameByUserId(const long long saveId);
+GameContext* loadGameByIdWrapper(const long long saveId);
 
 int main(void)
 {
@@ -75,11 +77,13 @@ void startSavesMenu()
         switch (loopReadInteger("> "))
         {
         case 1:
-            printf("Listing all saved games...\n");
+            printf("\n");
+            listAllSavedGamesOption();
             break;
 
         case 2:
-            printf("Listing all saved games for a particular player...\n");
+            printf("\n");
+            listAllSavedGamesParticularPlayerOption();
             break;
 
         case 3:
@@ -121,7 +125,7 @@ void playNewGameMenuOption()
 
 void loadGameMenuOption()
 {
-    GameContext* loadedGame = loadGameByUserId(loopReadInteger("Enter the id of the save to load: "));
+    GameContext* loadedGame = loadGameByIdWrapper(loopReadInteger("Enter the id of the save to load: "));
     if (!loadedGame)
     {
         return;
@@ -133,7 +137,7 @@ void loadGameMenuOption()
 
 void showBoardOfSavedGameOption()
 {
-    GameContext* loadedGame = loadGameByUserId(loopReadInteger("Enter the id of the save to show: "));
+    GameContext* loadedGame = loadGameByIdWrapper(loopReadInteger("Enter the id of the save to show: "));
     if (!loadedGame)
     {
         return;
@@ -141,6 +145,16 @@ void showBoardOfSavedGameOption()
 
     displayGameHeader(loadedGame);
     freeGameContext(loadedGame);
+}
+
+void listAllSavedGamesOption()
+{
+    listAllSavedGames();
+}
+
+void listAllSavedGamesParticularPlayerOption()
+{
+
 }
 
 void startGameWrapper(GameContext* gameContext)
@@ -169,7 +183,7 @@ void startGameWrapper(GameContext* gameContext)
     }
 }
 
-GameContext* loadGameByUserId(const long long saveId)
+GameContext* loadGameByIdWrapper(const long long saveId)
 {
     ErrorCode errorCode;
     GameContext* loadedGame = loadGameBySaveId(saveId, &errorCode);

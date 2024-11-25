@@ -9,6 +9,8 @@
 const char* SAVES_ID_COUNTER_FILEPATH = "saves_id_counter";
 const char* SAVES_FILEPATH = "results.txt";
 
+int countEmptyCells(const Board* board);
+
 long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
 {
     if (!gameContext)
@@ -102,4 +104,57 @@ GameContext* loadGameBySaveId(const long long targetSaveId, ErrorCode* errorCode
     free(line);
     if (errorCode) *errorCode = NO_ERROR;
     return deserializedGameContext;
+}
+
+void listAllSavedGames()
+{
+    ErrorCode errorCode;
+
+    const long long lastSaveId = loadPreviousId(SAVES_ID_COUNTER_FILEPATH, &errorCode);
+    if (errorCode != NO_ERROR)
+    {
+        return;
+    }
+
+    if (lastSaveId == ID_START)
+    {
+        printf("No saved games were found.\n");
+        return;
+    }
+
+    printf("List of saved games:\n");
+    for (long long saveId = ID_START; saveId <= lastSaveId; ++saveId)
+    {
+        GameContext* gameContext = loadGameBySaveId(saveId, &errorCode);
+        if (!gameContext)
+        {
+            if (errorCode != NO_ERROR)
+            {
+                printf("Unexpected error occurred while trying to list all saved games.");
+                exit(EXIT_FAILURE);
+            }
+
+            continue;
+        }
+
+        printf("ID: %lld; %s ('X') vs %s ('O'); %d empty cells\n",
+            saveId,
+            gameContext->crossPlayer.name, gameContext->zeroPlayer.name,
+            countEmptyCells(gameContext->board));
+        freeGameContext(gameContext);
+    }
+}
+
+int countEmptyCells(const Board* board)
+{
+    int emptyCellCounter = 0;
+    for (int cellIndex = 0; cellIndex < TOTAL_CELLS; ++cellIndex)
+    {
+        if (board->cellArray[cellIndex] == EMPTY)
+        {
+            ++emptyCellCounter;
+        }
+    }
+
+    return emptyCellCounter;
 }

@@ -5,14 +5,7 @@
 #include <stdio.h>
 
 const long long ID_START = 1;
-const long long ID_NOT_FOUND = -2;
-
-/// Load previous id from the counter file or return initial id - 1 (because it will be incremented afterward).
-/// @param idCounterFilepath filepath of the id counter.
-/// @param errorCode output error parameter; ERROR_FILE_STATE in case there was an invalid id in the counter file,
-/// NO_ERROR otherwise.
-/// @return 0 in case no counter file was found, previous index from counter file otherwise.
-long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode);
+const long long ID_NOT_FOUND = -1;
 
 /// Save the specified id to the counter file.
 /// @param idCounterFilepath filepath of the id counter.
@@ -21,24 +14,6 @@ long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode);
 /// NO_ERROR otherwise.
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode);
 
-long long generateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
-{
-    long long id = loadPreviousId(idCounterFilepath, errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
-    {
-        return ID_NOT_FOUND;
-    }
-
-    ++id;
-    saveId(idCounterFilepath, id, errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
-    {
-        return ID_NOT_FOUND;
-    }
-
-    if (errorCode) *errorCode = NO_ERROR;
-    return id;
-}
 
 long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode)
 {
@@ -60,6 +35,25 @@ long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode)
     if (errorCode) *errorCode = NO_ERROR;
     fclose(idCounterFile);
     return previousId;
+}
+
+long long generateNextId(const char* idCounterFilepath, ErrorCode* errorCode)
+{
+    long long id = loadPreviousId(idCounterFilepath, errorCode);
+    if (errorCode && *errorCode != NO_ERROR)
+    {
+        return ID_NOT_FOUND;
+    }
+
+    ++id;
+    saveId(idCounterFilepath, id, errorCode);
+    if (errorCode && *errorCode != NO_ERROR)
+    {
+        return ID_NOT_FOUND;
+    }
+
+    if (errorCode) *errorCode = NO_ERROR;
+    return id;
 }
 
 void saveId(const char* idCounterFilepath, const long long id, ErrorCode* errorCode)
