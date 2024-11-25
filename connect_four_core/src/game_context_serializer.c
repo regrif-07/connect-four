@@ -11,7 +11,7 @@
 
 constexpr int PLAYER_NAME_BUFFER_SIZE = 256;
 
-// serialization format: [id] "[cross player name]" "[zero player name]" [current player (X or O)] [serialized board] [game state (number)]
+// serialization format: "[cross player name]" "[zero player name]" [current player (X or O)] [serialized board] [game state (number)]
 const char* GAME_CONTEXT_SERIALIZE_FORMAT_STRING = "\"%s\" \"%s\" %c \"%s\" %d";
 const char* GAME_CONTEXT_DESERIALIZE_FORMAT_STRING = "\"%[^\"]\" \"%[^\"]\" %c \"%[^\"]\" %d";
 // %[^\"] - match any character except '"' (quote mark) character. This will stop functions supporting format strings

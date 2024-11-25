@@ -76,6 +76,8 @@ GameContext* loadGameById(const long long targetGameId, ErrorCode* errorCode)
                 matchFound = true;
                 break;
             }
+
+            free(serializedGameContext);
         }
     }
 
