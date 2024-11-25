@@ -17,7 +17,7 @@ char cellToChar(const Cell cell)
     case ZERO:   return 'O';
     case STREAK: return 'Y';
     default:
-        assert(0 && "Unhandled cell type");
+        assert(false && "Unhandled cell type");
     }
 }
 

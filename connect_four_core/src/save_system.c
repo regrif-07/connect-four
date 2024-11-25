@@ -69,7 +69,7 @@ GameContext* loadGameById(const long long targetGameId, ErrorCode* errorCode)
     while (getline(&line, &buffLen, savesFile) != -1)
     {
         long long gameId = ID_NOT_FOUND;
-        if (sscanf(line, "%lld %m[^\n]", &gameId, &serializedGameContext) == 1)
+        if (sscanf(line, "%lld %m[^\n]", &gameId, &serializedGameContext) == 2)
         {
             if (gameId == targetGameId)
             {
@@ -84,7 +84,6 @@ GameContext* loadGameById(const long long targetGameId, ErrorCode* errorCode)
     if (!matchFound)
     {
         free(line);
-        if (serializedGameContext) free(serializedGameContext);
         if (errorCode) *errorCode = NO_ERROR;
         return nullptr;
     }

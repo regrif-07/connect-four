@@ -2,12 +2,14 @@
 #include <game_context.h>
 #include <game_functionality.h>
 #include <io_utility.h>
+#include <save_system.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
 void startMainMenu();
 void startSavesMenu();
+void startGameWrapper(GameContext* gameContext);
 
 int main(void)
 {
@@ -33,36 +35,15 @@ void startMainMenu()
 
             ErrorCode errorCode;
             GameContext* gameContext = createNewGameContext(&errorCode);
-            if (errorCode == NO_ERROR)
+            if (gameContext)
             {
-                printf("\n");
-                startGame(gameContext, &errorCode);
-                printf("\n");
-
-                displayBoard(gameContext->board);
-                switch (gameContext->gameState)
-                {
-                case CROSS_WIN:
-                    printf("%s ('X') victory!\n", gameContext->crossPlayer.name);
-                    break;
-
-                case ZERO_WIN:
-                    printf("%s ('O') victory!\n", gameContext->zeroPlayer.name);
-                    break;
-
-                case DRAW:
-                    printf("It's a draw!\n");
-                    break;
-
-                default:
-                    assert(false && "unhandled game state");
-                }
-
+                startGameWrapper(gameContext);
                 freeGameContext(gameContext);
             }
             else
             {
                 printf("Unexpected error occurred while trying to create a new game.\n");
+                exit(EXIT_FAILURE);
             }
 
             break;
@@ -108,7 +89,25 @@ void startSavesMenu()
             break;
 
         case 4:
-            printf("Loading the game...\n");
+            long long saveId = loopReadInteger("Enter the id of the save to load: ");
+
+            ErrorCode errorCode;
+            GameContext* loadedGame = loadGameById(saveId, &errorCode);
+            if (!loadedGame)
+            {
+                if (errorCode && errorCode != NO_ERROR)
+                {
+                    printf("Unexpected error occurred while trying to load the specified save.");
+                    exit(EXIT_FAILURE);
+                }
+
+                printf("Save with id %lld was not found.\n", saveId);
+                break;
+            }
+
+            startGameWrapper(loadedGame);
+            freeGameContext(loadedGame);
+
             break;
 
         case 5:
@@ -119,5 +118,31 @@ void startSavesMenu()
         }
 
         printf("\n");
+    }
+}
+
+void startGameWrapper(GameContext* gameContext)
+{
+    printf("\n");
+    startGame(gameContext, nullptr);
+    printf("\n");
+
+    displayBoard(gameContext->board); // display the board for the last time
+    switch (gameContext->gameState)
+    {
+    case CROSS_WIN:
+        printf("%s ('X') victory!\n", gameContext->crossPlayer.name);
+        break;
+
+    case ZERO_WIN:
+        printf("%s ('O') victory!\n", gameContext->zeroPlayer.name);
+        break;
+
+    case DRAW:
+        printf("It's a draw!\n");
+        break;
+
+    default:
+        assert(false && "unhandled game state");
     }
 }

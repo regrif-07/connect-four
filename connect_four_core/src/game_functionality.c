@@ -74,7 +74,7 @@ void displayGameHeader(const GameContext* gameContext)
            "%s ('X') VS %s ('O')\n"
            "*===*\n", gameContext->crossPlayer.name, gameContext->zeroPlayer.name);
 
-    printf("Initial board state:\n");
+    printf("Board state:\n");
     displayBoard(gameContext->board);
     printf("*===*\n");
 }
@@ -89,7 +89,7 @@ void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowInde
         if (playerInputInteger == 0)
         {
             ErrorCode errorCode;
-            long long saveId = saveGame(gameContext, &errorCode);
+            const long long saveId = saveGame(gameContext, &errorCode);
             if (errorCode != NO_ERROR)
             {
                 printf("Unexpected error occurred while trying to save your game.\n");
