@@ -71,7 +71,7 @@ GameState checkGameStateAndMarkWinningStreak(Board* board, const int lastMoveRow
             if (checkAndMarkCellStreakByOffsets(board, lastMoveRowIndex, lastMoveColumnIndex, lastMoveCell, rowOffset, columnOffset))
             {
                 if (errorCode) *errorCode = NO_ERROR;
-                // winning streak was found, use information about last move to identify the winner
+                // winning streak was found, use information about the last move to identify the winner
                 return (lastMoveCell == CROSS) ? CROSS_WIN : ZERO_WIN;
             }
         }

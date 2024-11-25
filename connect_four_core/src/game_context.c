@@ -23,7 +23,7 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
     gameContext->currentPlayer = &(gameContext->crossPlayer);
 
     gameContext->board = createEmptyBoard(errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
+    if (!gameContext->board)
     {
         free(gameContext->zeroPlayer.name);
         free(gameContext->crossPlayer.name);

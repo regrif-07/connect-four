@@ -26,7 +26,7 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
     }
 
     char* serializedBoard = serializeBoard(gameContext->board, errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
+    if (!serializedBoard)
     {
         return nullptr;
     }
@@ -88,12 +88,14 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     if (!crossPlayerName)
     {
         if (errorCode) *errorCode = ERROR_MEMORY;
+        return nullptr;
     }
 
     char* zeroPlayerName = calloc(sizeof(char), strlen(zeroPlayerNameBuffer) + 1);
     if (!zeroPlayerName)
     {
         free(crossPlayerName);
+        if (errorCode) *errorCode = ERROR_MEMORY;
         return nullptr;
     }
 
@@ -109,7 +111,7 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     }
 
     Board* deserializedBoard = deserializeBoard(serializedBoard, errorCode);
-    if (errorCode && *errorCode != NO_ERROR)
+    if (!deserializedBoard)
     {
         free(crossPlayerName);
         free(zeroPlayerName);

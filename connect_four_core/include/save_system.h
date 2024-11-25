@@ -16,7 +16,7 @@ long long saveGame(const char* savesFilepath, const GameContext* gameContext, Er
 /// @param savesFilepath saves filepath.
 /// @param targetSaveId id of the save to load.
 /// @param errorCode out error parameter; ERROR_FILE_STATE in case saves file has invalid format, NO_ERROR otherwise.
-/// @return heap allocated loaded game context.
+/// @return heap allocated loaded game context or nullptr in case of allocation failure.
 GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetSaveId, ErrorCode* errorCode);
 
 /// List all saved games.

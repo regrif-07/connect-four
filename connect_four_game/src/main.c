@@ -197,7 +197,7 @@ GameContext* loadGameByIdWrapper(const long long saveId)
     GameContext* loadedGame = loadGameBySaveId(DEFAULT_SAVES_FILEPATH, saveId, &errorCode);
     if (!loadedGame)
     {
-        if (errorCode && errorCode != NO_ERROR)
+        if (errorCode != NO_ERROR)
         {
             printf("Unexpected error occurred while trying to load the specified save.");
             exit(EXIT_FAILURE);
