@@ -21,13 +21,12 @@ Cell charToCell(const char cellChar, ErrorCode* errorCode);
 /// @param board board to serialize.
 /// @param errorCode out error parameter; ERROR_MEMORY in case serialized board string allocation failed,
 /// NO_ERROR otherwise.
-/// @return serialized board (string).
+/// @return heap allocated serialized board (string) or nullptr in case of allocation failure.
 char* serializeBoard(const Board* board, ErrorCode* errorCode);
 
 /// Deserialize the board string into a Board structure.
 /// @param serializedBoard board serialized into string.
 /// @param errorCode out error parameter; ERROR_INVALID_ARGUMENT in case serializedBoard has invalid size or if it
 /// contains invalid cell character, ERROR_MEMORY in case board memory allocation failed, NO_ERROR otherwise.
-/// @return board, that was deserialized from the provided serializedBoard (string), or nullptr in case of
-/// deserialization failure.
+/// @return heap allocated deserialized board, or nullptr in case of deserialization failure.
 Board* deserializeBoard(const char* serializedBoard, ErrorCode* errorCode);
