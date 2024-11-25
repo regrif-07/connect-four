@@ -25,6 +25,9 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
     gameContext->board = createEmptyBoard(errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
+        free(gameContext->zeroPlayer.name);
+        free(gameContext->crossPlayer.name);
+        free(gameContext);
         return nullptr;
     }
 
@@ -36,8 +39,8 @@ GameContext* createNewGameContext(ErrorCode* errorCode)
 
 void freeGameContext(GameContext* gameContext)
 {
-    free(gameContext->crossPlayer.name);
-    free(gameContext->zeroPlayer.name);
     free(gameContext->board);
+    free(gameContext->zeroPlayer.name);
+    free(gameContext->crossPlayer.name);
     free(gameContext);
 }

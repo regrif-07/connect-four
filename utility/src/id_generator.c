@@ -32,8 +32,8 @@ long long loadPreviousId(const char* idCounterFilepath, ErrorCode* errorCode)
         return ID_NOT_FOUND;
     }
 
-    if (errorCode) *errorCode = NO_ERROR;
     fclose(idCounterFile);
+    if (errorCode) *errorCode = NO_ERROR;
     return previousId;
 }
 

@@ -38,6 +38,7 @@ long long saveGame(const char* savesFilepath, const GameContext* gameContext, Er
     char* serializedGameContext = serializeGameContext(gameContext, errorCode);
     if (!serializedGameContext)
     {
+        fclose(savesFile);
         return ID_NOT_FOUND;
     }
 
@@ -109,8 +110,8 @@ GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetS
         return nullptr;
     }
 
-    free(serializedGameContext);
     free(line);
+    free(serializedGameContext);
     if (errorCode) *errorCode = NO_ERROR;
     return deserializedGameContext;
 }

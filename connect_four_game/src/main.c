@@ -32,7 +32,7 @@ int main(void)
 {
     startMainMenu();
 
-    printf("\nThank you for playing Connect Four!");
+    printf("\nThank you for playing Connect Four!\n");
 
     return EXIT_SUCCESS;
 }

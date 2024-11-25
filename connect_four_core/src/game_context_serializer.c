@@ -38,9 +38,10 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
         serializedBoard,
         (int)(gameContext->gameState));
 
-    char* gameContextSerialized = malloc(sizeof(char) * gameContextSerializedLength + 1);
+    char* gameContextSerialized = calloc(sizeof(char), gameContextSerializedLength + 1);
     if (!gameContextSerialized)
     {
+        free(serializedBoard);
         if (errorCode) *errorCode = ERROR_MEMORY;
         return nullptr;
     }
@@ -52,6 +53,7 @@ char* serializeGameContext(const GameContext* gameContext, ErrorCode* errorCode)
         serializedBoard,
         (int)(gameContext->gameState));
 
+    free(serializedBoard);
     if (errorCode) *errorCode = NO_ERROR;
     return gameContextSerialized;
 }
@@ -82,19 +84,27 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
         return nullptr;
     }
 
-    char* crossPlayerName = malloc(sizeof(char) * strlen(crossPlayerNameBuffer));
-    char* zeroPlayerName = malloc(sizeof(char) * strlen(zeroPlayerNameBuffer));
-    if (!crossPlayerName || !zeroPlayerName)
+    char* crossPlayerName = calloc(sizeof(char), strlen(crossPlayerNameBuffer) + 1);
+    if (!crossPlayerName)
     {
         if (errorCode) *errorCode = ERROR_MEMORY;
+    }
+
+    char* zeroPlayerName = calloc(sizeof(char), strlen(zeroPlayerNameBuffer) + 1);
+    if (!zeroPlayerName)
+    {
+        free(crossPlayerName);
         return nullptr;
     }
+
     strcpy(crossPlayerName, crossPlayerNameBuffer);
     strcpy(zeroPlayerName, zeroPlayerNameBuffer);
 
     const Cell currentPlayerCell = charToCell(currentPlayerCellChar, errorCode);
     if (errorCode && *errorCode != NO_ERROR)
     {
+        free(crossPlayerName);
+        free(zeroPlayerName);
         return nullptr;
     }
 
@@ -109,6 +119,8 @@ GameContext* deserializeGameContext(const char* serializedGameContext, ErrorCode
     GameContext* deserializedGameContext = malloc(sizeof(GameContext));
     if (!deserializedGameContext)
     {
+        free(crossPlayerName);
+        free(zeroPlayerName);
         if (errorCode) *errorCode = ERROR_MEMORY;
         return nullptr;
     }

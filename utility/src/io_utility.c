@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <string_utility.h>
 
@@ -72,11 +73,13 @@ char* readLine(const char* prompt, const bool discardEmpty)
         size_t lineLen = strlen(line);
         if (lineLen == 1 && line[0] == '\n' && discardEmpty)
         {
+            free(line);
             printf("Empty input is not supported.\n");
             continue;
         }
         if (discardEmpty && isWhitespaceOnly(line))
         {
+            free(line);
             printf("Empty input (whitespace-only) is not supported.\n");
             continue;
         }
