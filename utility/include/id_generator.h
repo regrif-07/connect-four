@@ -2,6 +2,9 @@
 
 #include <error_codes.h>
 
+extern const long long ID_START;
+extern const long long ID_NOT_FOUND;
+
 /// Generate next id with the counter specified by idCounterFilepath.
 /// @param idCounterFilepath filepath of the id counter.
 /// @param errorCode out error parameter. ERROR_FILE_STATE in case provided counter file has invalid contents
