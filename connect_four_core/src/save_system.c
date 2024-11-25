@@ -1,7 +1,9 @@
+#include <save_system.h>
+
 #include <game_context.h>
 #include <game_context_serializer.h>
+
 #include <id_generator.h>
-#include <save_system.h>
 
 #include <stdio.h>
 #include <stdlib.h>

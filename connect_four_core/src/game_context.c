@@ -1,6 +1,8 @@
 #include <game_context.h>
+
 #include <id_generator.h>
 #include <io_utility.h>
+
 #include <stdlib.h>
 
 GameContext* createNewGameContext(ErrorCode* errorCode)

@@ -1,8 +1,9 @@
-#include <assert.h>
 #include <game_state.h>
 
 #include <board.h>
 #include <error_codes.h>
+
+#include <assert.h>
 
 constexpr int WINNING_STREAK_LENGTH = 4;
 

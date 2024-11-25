@@ -1,9 +1,10 @@
 #include <game_functionality.h>
 
-#include <board.h>
-#include <error_codes.h>
 #include <game_context.h>
 #include <game_state.h>
+
+#include <board.h>
+#include <error_codes.h>
 #include <io_utility.h>
 
 #include <assert.h>

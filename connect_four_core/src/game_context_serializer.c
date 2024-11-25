@@ -1,9 +1,10 @@
 #include <game_context_serializer.h>
 
+#include <game_context.h>
+
 #include <board.h>
 #include <board_serializer.h>
 #include <error_codes.h>
-#include <game_context.h>
 
 #include <stdio.h>
 #include <stdlib.h>

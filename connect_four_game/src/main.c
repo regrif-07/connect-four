@@ -1,9 +1,9 @@
-#include <assert.h>
 #include <game_context.h>
 #include <game_functionality.h>
 #include <io_utility.h>
 #include <save_system.h>
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 

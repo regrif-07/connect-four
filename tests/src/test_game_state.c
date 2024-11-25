@@ -4,6 +4,7 @@
 #include <board_serializer.h>
 #include <error_codes.h>
 #include <game_state.h>
+
 #include <stdlib.h>
 
 void setUp() {}

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <error_codes.h>
 #include <game_context.h>
-#include <game_state.h>
+
+#include <error_codes.h>
 
 /// Start the main game loop using provided GameContext.
 /// @param gameContext GameContext used to start the game and track its state.

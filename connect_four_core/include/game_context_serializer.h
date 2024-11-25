@@ -1,7 +1,8 @@
 #pragma once
 
-#include <error_codes.h>
 #include <game_context.h>
+
+#include <error_codes.h>
 
 /// Serialize the provided game context into the string format.
 /// @param gameContext game context to serialize.

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <board.h>
 #include <game_context.h>
 #include <game_state.h>
+
+#include <board.h>
 
 /// Represent a player with a name and cell type
 typedef struct

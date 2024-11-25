@@ -1,6 +1,6 @@
-#include <board.h>
-
 #include <unity.h>
+
+#include <board.h>
 
 #include <stdlib.h>
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <game_context.h>
+
 #include <error_codes.h>
 
 extern const char* DEFAULT_SAVES_FILEPATH;
