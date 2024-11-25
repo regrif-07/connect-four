@@ -1,9 +1,9 @@
-#include <game_context.h>
+#include <game_functionality.h>
 
 #include <board.h>
 #include <error_codes.h>
+#include <game_context.h>
 #include <game_state.h>
-#include <id_generator.h>
 #include <io_utility.h>
 
 #include <assert.h>
@@ -12,10 +12,6 @@
 #include <stdlib.h>
 
 const char* GAME_CONTEXT_ID_COUNTER_FILEPATH = "game_context_id_counter";
-
-/// Display the initial information about the game (game header, game id, players, board state).
-/// @param gameContext current GameContext.
-void displayGameHeader(const GameContext* gameContext);
 
 /// Loop and ask current player for a valid move he wants to play.
 /// Perform this move and return last move data throughout out parameters.

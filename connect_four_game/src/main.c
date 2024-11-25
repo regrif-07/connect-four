@@ -7,10 +7,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// menus
 void startMainMenu();
 void startSavesMenu();
+
+// menu option handlers
+void playNewGameMenuOption();
+void loadGameMenuOption();
+void showBoardOfSavedGameOption();
+
+// others
 void startGameWrapper(GameContext* gameContext);
-GameContext* loadGameByIdWrapper(const long long saveId);
+GameContext* loadGameByUserId(const long long saveId);
 
 int main(void)
 {
@@ -34,20 +42,7 @@ void startMainMenu()
         {
         case 1:
             printf("\n");
-
-            ErrorCode errorCode;
-            GameContext* gameContext = createNewGameContext(&errorCode);
-            if (gameContext)
-            {
-                startGameWrapper(gameContext);
-                freeGameContext(gameContext);
-            }
-            else
-            {
-                printf("Unexpected error occurred while trying to create a new game.\n");
-                exit(EXIT_FAILURE);
-            }
-
+            playNewGameMenuOption();
             break;
 
         case 2:
@@ -88,22 +83,13 @@ void startSavesMenu()
             break;
 
         case 3:
-            printf("Showing the board of one of the saved games...\n");
+            printf("\n");
+            showBoardOfSavedGameOption();
             break;
 
         case 4:
-            const long long saveId = loopReadInteger("Enter the id of the save to load: ");
-
-            GameContext* loadedGame = loadGameByIdWrapper(saveId);
-            if (!loadedGame)
-            {
-                break;
-            }
-
-            startGameWrapper(loadedGame);
-
-            freeGameContext(loadedGame);
-
+            printf("\n");
+            loadGameMenuOption();
             break;
 
         case 5:
@@ -115,6 +101,46 @@ void startSavesMenu()
 
         printf("\n");
     }
+}
+
+void playNewGameMenuOption()
+{
+    ErrorCode errorCode;
+    GameContext* gameContext = createNewGameContext(&errorCode);
+    if (gameContext)
+    {
+        startGameWrapper(gameContext);
+        freeGameContext(gameContext);
+    }
+    else
+    {
+        printf("Unexpected error occurred while trying to create a new game.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void loadGameMenuOption()
+{
+    GameContext* loadedGame = loadGameByUserId(loopReadInteger("Enter the id of the save to load: "));
+    if (!loadedGame)
+    {
+        return;
+    }
+
+    startGameWrapper(loadedGame);
+    freeGameContext(loadedGame);
+}
+
+void showBoardOfSavedGameOption()
+{
+    GameContext* loadedGame = loadGameByUserId(loopReadInteger("Enter the id of the save to show: "));
+    if (!loadedGame)
+    {
+        return;
+    }
+
+    displayGameHeader(loadedGame);
+    freeGameContext(loadedGame);
 }
 
 void startGameWrapper(GameContext* gameContext)
@@ -143,7 +169,7 @@ void startGameWrapper(GameContext* gameContext)
     }
 }
 
-GameContext* loadGameByIdWrapper(const long long saveId)
+GameContext* loadGameByUserId(const long long saveId)
 {
     ErrorCode errorCode;
     GameContext* loadedGame = loadGameBySaveId(saveId, &errorCode);
