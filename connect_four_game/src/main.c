@@ -155,13 +155,13 @@ void showBoardOfSavedGameOption()
 
 void listAllSavedGamesOption()
 {
-    listAllSavedGames();
+    listAllSavedGames(DEFAULT_SAVES_FILEPATH);
 }
 
 void listAllSavedGamesParticularPlayerOption()
 {
     char* playerNameFilter = readLine("Enter the name of one of the players to search: ", true);
-    listAllSavedGamesByPlayerName(playerNameFilter);
+    listAllSavedGamesByPlayerName(DEFAULT_SAVES_FILEPATH, playerNameFilter);
     free(playerNameFilter);
 }
 
@@ -194,7 +194,7 @@ void startGameWrapper(GameContext* gameContext)
 GameContext* loadGameByIdWrapper(const long long saveId)
 {
     ErrorCode errorCode;
-    GameContext* loadedGame = loadGameBySaveId(saveId, &errorCode);
+    GameContext* loadedGame = loadGameBySaveId(DEFAULT_SAVES_FILEPATH, saveId, &errorCode);
     if (!loadedGame)
     {
         if (errorCode && errorCode != NO_ERROR)

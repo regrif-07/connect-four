@@ -8,7 +8,7 @@
 #include <string.h>
 
 const char* SAVES_ID_COUNTER_FILEPATH = "saves_id_counter";
-const char* SAVES_FILEPATH = "results.txt";
+const char* DEFAULT_SAVES_FILEPATH = "results.txt";
 
 /// Display short info about the provided game context (with save id).
 /// @param saveId id of the save.
@@ -20,7 +20,7 @@ void displayShortGameInfo(const long long saveId, const GameContext* gameContext
 /// @return number of empty cells on the provided board.
 int countEmptyCells(const Board* board);
 
-long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
+long long saveGame(const char* savesFilepath, const GameContext* gameContext, ErrorCode* errorCode)
 {
     if (!gameContext)
     {
@@ -28,7 +28,7 @@ long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
         return ID_NOT_FOUND;
     }
 
-    FILE* savesFile = fopen(SAVES_FILEPATH, "a");
+    FILE* savesFile = fopen(savesFilepath, "a");
     if (!savesFile)
     {
         if (errorCode) *errorCode = ERROR_FILE_IO;
@@ -63,9 +63,9 @@ long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
     return saveId;
 }
 
-GameContext* loadGameBySaveId(const long long targetSaveId, ErrorCode* errorCode)
+GameContext* loadGameBySaveId(const char* savesFilepath, const long long targetSaveId, ErrorCode* errorCode)
 {
-    FILE* savesFile = fopen(SAVES_FILEPATH, "r");
+    FILE* savesFile = fopen(savesFilepath, "r");
     if (!savesFile)
     {
         if (errorCode) *errorCode = NO_ERROR;
@@ -115,7 +115,7 @@ GameContext* loadGameBySaveId(const long long targetSaveId, ErrorCode* errorCode
     return deserializedGameContext;
 }
 
-void listAllSavedGames()
+void listAllSavedGames(const char* savesFilepath)
 {
     ErrorCode errorCode;
 
@@ -134,7 +134,7 @@ void listAllSavedGames()
     printf("List of saved games:\n");
     for (long long saveId = ID_START; saveId <= lastSaveId; ++saveId)
     {
-        GameContext* gameContext = loadGameBySaveId(saveId, &errorCode);
+        GameContext* gameContext = loadGameBySaveId(savesFilepath, saveId, &errorCode);
         if (!gameContext)
         {
             if (errorCode != NO_ERROR)
@@ -152,7 +152,7 @@ void listAllSavedGames()
     }
 }
 
-void listAllSavedGamesByPlayerName(const char* playerNameFilter)
+void listAllSavedGamesByPlayerName(const char* savesFilepath, const char* playerNameFilter)
 {
     ErrorCode errorCode;
 
@@ -172,7 +172,7 @@ void listAllSavedGamesByPlayerName(const char* playerNameFilter)
     printf("List of all saved games where at least one player is \"%s\":\n", playerNameFilter);
     for (long long saveId = ID_START; saveId <= lastSaveId; ++saveId)
     {
-        GameContext* gameContext = loadGameBySaveId(saveId, &errorCode);
+        GameContext* gameContext = loadGameBySaveId(savesFilepath, saveId, &errorCode);
         if (!gameContext)
         {
             if (errorCode != NO_ERROR)

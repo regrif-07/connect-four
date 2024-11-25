@@ -85,7 +85,7 @@ void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowInde
         if (playerInputInteger == 0)
         {
             ErrorCode errorCode;
-            const long long saveId = saveGame(gameContext, &errorCode);
+            const long long saveId = saveGame(DEFAULT_SAVES_FILEPATH, gameContext, &errorCode);
             if (errorCode != NO_ERROR)
             {
                 printf("Unexpected error occurred while trying to save your game.\n");
