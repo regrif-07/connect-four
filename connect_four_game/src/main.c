@@ -25,7 +25,8 @@ void startMainMenu()
 {
     while (true)
     {
-        printf("1) Play a new game\n"
+        printf("=== MAIN MENU ===\n"
+               "1) Play a new game\n"
                "2) Load already saved game\n"
                "3) Exit the game\n");
 
@@ -69,7 +70,8 @@ void startSavesMenu()
 {
     while (true)
     {
-        printf("1) List all saved games\n"
+        printf("=== SAVES MENU ===\n"
+               "1) List all saved games\n"
                "2) List all saved games for a particular player\n"
                "3) Show the board of one of the saved games\n"
                "4) Load a game\n"
