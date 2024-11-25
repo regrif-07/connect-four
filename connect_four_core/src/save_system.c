@@ -37,7 +37,7 @@ long long saveGame(const GameContext* gameContext, ErrorCode* errorCode)
         return ID_NOT_FOUND;
     }
 
-    if (fprintf(savesFile, "%lld%s\n", saveId, serializedGameContext) < 0)
+    if (fprintf(savesFile, "%lld %s\n", saveId, serializedGameContext) < 0)
     {
         fclose(savesFile);
         free(serializedGameContext);

@@ -7,6 +7,7 @@
 #include <io_utility.h>
 
 #include <assert.h>
+#include <save_system.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -84,7 +85,22 @@ void startCurrentPlayerTurn(const GameContext* gameContext, int* lastMoveRowInde
 
     while (true)
     {
-        const int targetColumnIndex = loopReadIntegerInRange("Enter the column: ", 1, BOARD_WIDTH) - 1;
+        const int playerInputInteger = loopReadIntegerInRange("Enter the column (or enter '0' to save the game): ", 0, BOARD_WIDTH);
+        if (playerInputInteger == 0)
+        {
+            ErrorCode errorCode;
+            long long saveId = saveGame(gameContext, &errorCode);
+            if (errorCode != NO_ERROR)
+            {
+                printf("Unexpected error occurred while trying to save your game.\n");
+                exit(EXIT_FAILURE);
+            }
+
+            printf("Your game was successfully saved. Save id: %lld.\n", saveId);
+            continue;
+        }
+
+        const int targetColumnIndex = playerInputInteger - 1;
         const int targetRowIndex = findFirstFreeColumnCell(gameContext->board, targetColumnIndex);
         if (targetRowIndex == -1)
         {
